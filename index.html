@@ -92,6 +92,30 @@
   .mobile-nav a:first-child{ border-top: none; }
   .mobile-nav.open{ display:block; }
 
+  /* ---- animasyonlar ---- */
+  @keyframes fadeUp{ from{ opacity:0; transform: translateY(26px); } to{ opacity:1; transform: translateY(0); } }
+  .reveal{ opacity:0; }
+  .reveal.in{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) forwards; }
+
+  @keyframes floaty{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-9px); } }
+  .hero-art .shelf > div{ animation: floaty 4s ease-in-out infinite; }
+  .hero-art .shelf > div:nth-child(2){ animation-delay:.4s; }
+  .hero-art .shelf > div:nth-child(3){ animation-delay:.8s; }
+  .hero-art .shelf > div:nth-child(4){ animation-delay:1.2s; }
+
+  @keyframes tagPulse{ 0%,100%{ transform: rotate(8deg) scale(1); } 50%{ transform: rotate(8deg) scale(1.08); } }
+  .hero-art .tag{ animation: tagPulse 2.4s ease-in-out infinite; }
+
+  @keyframes cardIn{ from{ opacity:0; } to{ opacity:1; } }
+  .card{ animation: cardIn .45s ease both; }
+  @keyframes btnPulse{ 0%,100%{ box-shadow: 3px 3px 0 var(--ink); } 50%{ box-shadow: 3px 3px 14px rgba(255,90,0,.55); } }
+  .btn-order{ animation: btnPulse 3s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; } .reveal.in{ animation:none; }
+    .hero-art .shelf > div, .hero-art .tag, .card, .btn-order{ animation:none; }
+  }
+
   /* ---- buttons ---- */
   .btn-order{
     display:inline-flex; align-items:center; gap:8px;
@@ -283,7 +307,7 @@
 </header>
 
 <section class="hero" id="top">
-  <div class="wrap hero-inner">
+  <div class="wrap hero-inner reveal">
     <div>
       <span class="eyebrow">Gerçek koleksiyon parçaları</span>
       <h2>Topladığımız değil, peşinde olduğunuz arabalar.</h2>
@@ -300,7 +324,7 @@
 
 <section id="koleksiyon">
   <div class="wrap">
-    <div class="cat-head">
+    <div class="cat-head reveal">
       <div>
         <h3>Koleksiyon</h3>
         <p>Raflardaki modeller. Üzerine tıklayıp sipariş verebilirsin.</p>
@@ -312,7 +336,7 @@
 </section>
 
 <section class="strip" id="hakkinda">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div>
       <h3>Neden AHCollector?</h3>
       <p>Her araba tek tek elden geçer. Kutulu mu, çıkmış mı, boya çiziği var mı — fotoğraftan önce biz söyleriz. Küçük bir işletmeyiz, o yüzden ilgilendiğin modeli sorduğunda gerçek birinden cevap alırsın.</p>
@@ -322,7 +346,7 @@
 </section>
 
 <footer id="iletisim">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div>© 2026 AHCollector — Hot Wheels tutkunları için.<br><span style="font-size:11px;">🔒 Bu site sağ‑tık ve kopyalama koruması altındadır.</span></div>
     <div>
       <a href="#">Instagram</a> · <a href="#">WhatsApp</a> · <a href="#">Sipariş</a>
@@ -403,9 +427,10 @@
       grid.innerHTML = '<div class="no-result">Aramana uygun model bulunamadı.</div>';
       return;
     }
-    list.forEach(c=>{
+    list.forEach((c, i)=>{
       const card = document.createElement("article");
       card.className = "card " + seriesClass(c.series);
+      card.style.animationDelay = (i * 0.05) + "s";
       card.innerHTML = `
         <div class="car-stage">
           <span class="yr ${seriesClass(c.series)}">${c.year}</span>
@@ -427,6 +452,14 @@
 
   // ---- arama ----
   document.getElementById("search").addEventListener("input", e => { query = e.target.value; render(); });
+
+  // ---- scroll reveal (belirme animasyonu) ----
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   // ---- mobil menü ----
   const menuBtn = document.getElementById("menuBtn");
