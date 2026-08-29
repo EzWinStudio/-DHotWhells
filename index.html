@@ -10,7 +10,364 @@
 <style>
   :root{
     --flame: #ff5a00;
+    --flame-2: #ff8a1e;<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AHCollector — Hot Wheels Koleksiyonu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --flame: #ff5a00;
     --flame-2: #ff8a1e;
+    --ink: #14130f;
+    --paper: #f3efe6;
+    --paper-2: #e7e1d4;
+    --line: #2a2722;
+    --muted: #6f685c;
+    --card: #fbf9f4;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family: "Inter", system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(255,90,0,.05), transparent 40%),
+      repeating-linear-gradient(45deg, rgba(0,0,0,.013) 0 2px, transparent 2px 7px);
+  }
+  a{ color: inherit; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---- header ---- */
+  header{
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 20px; max-width: 1120px; margin: 0 auto; gap: 16px;
+  }
+  .brand{ display:flex; align-items:center; gap: 12px; text-decoration:none; }
+  .flame{
+    width: 42px; height: 42px; flex: 0 0 auto;
+    display:grid; place-items:center;
+    background: var(--ink); color: var(--flame);
+    border: 2px solid var(--ink); border-radius: 9px;
+    font-family:"Archivo Black", sans-serif; font-size: 20px; letter-spacing:-1px;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--flame);
+  }
+  .brand h1{
+    font-family:"Archivo Black", sans-serif;
+    font-size: 21px; margin:0; line-height:1; letter-spacing:-.5px;
+  }
+  .brand small{ display:block; font-family:"Inter"; font-weight:600; font-size:11px; color: var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:3px; }
+  nav{ display:flex; align-items:center; gap: 6px; }
+  nav a{
+    text-decoration:none; font-weight:600; font-size:14px; color: var(--ink);
+    padding: 9px 12px; border-radius: 8px;
+  }
+  nav a:hover{ background: var(--paper-2); }
+
+  .menu-btn{
+    display:none; background: var(--card); border:1.5px solid var(--line);
+    border-radius: 9px; width: 42px; height: 42px; font-size: 18px; cursor: pointer;
+    color: var(--ink); align-items:center; justify-content:center;
+  }
+  .menu-btn:hover{ background: var(--paper-2); }
+  .mobile-nav{ display:none; background: var(--paper); border-bottom: 2px solid var(--ink); }
+  .mobile-nav a{
+    display:block; text-decoration:none; font-weight:600; font-size:15px;
+    padding: 14px 20px; border-top: 1px solid var(--paper-2); color: var(--ink);
+  }
+  .mobile-nav a:first-child{ border-top: none; }
+  .mobile-nav.open{ display:block; }
+
+  /* ---- buttons ---- */
+  .btn-order{
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--flame); color:#fff; font-weight:700; font-size:14px;
+    text-decoration:none; padding: 10px 16px; border-radius: 9px;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform .05s ease, box-shadow .05s ease;
+    cursor:pointer;
+  }
+  .btn-order:hover{ transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  .btn-order:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+  /* ---- hero ---- */
+  .hero{ border-bottom: 2px solid var(--ink); }
+  .hero-inner{
+    display:grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items:center;
+    padding: 44px 0 40px;
+  }
+  .eyebrow{
+    display:inline-block; font-weight:700; font-size:12px; letter-spacing:2px;
+    text-transform:uppercase; color: var(--flame);
+    border:1.5px solid var(--flame); padding:5px 10px; border-radius:20px; margin-bottom:16px;
+  }
+  .hero h2{
+    font-family:"Archivo Black", sans-serif; font-size: clamp(30px, 5vw, 50px);
+    line-height: 1.02; margin: 0 0 14px; letter-spacing:-1px;
+  }
+  .hero p{ font-size: 16px; color:#3a352d; max-width: 460px; line-height:1.55; margin:0 0 22px; }
+  .hero-note{
+    margin-top: 18px; font-size: 13px; color: var(--muted);
+    border-left: 3px solid var(--flame); padding-left: 12px; font-style: italic;
+  }
+  .hero-art{
+    background: var(--ink); border:2px solid var(--ink); border-radius: 16px;
+    padding: 22px; box-shadow: 6px 6px 0 var(--flame);
+    position: relative; overflow:hidden;
+  }
+  .hero-art .shelf{ display:flex; justify-content:space-around; align-items:flex-end; gap:6px; flex-wrap:wrap; }
+  .hero-art .tag{
+    position:absolute; top:14px; right:-30px; transform: rotate(8deg);
+    background: var(--flame); color:#fff; font-family:"Archivo Black"; font-size:13px;
+    padding:6px 36px; letter-spacing:1px;
+  }
+
+  /* ---- catalog ---- */
+  .cat-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:16px; padding: 38px 0 18px; flex-wrap:wrap;
+  }
+  .cat-head h3{ font-family:"Archivo Black"; font-size: 26px; margin:0; letter-spacing:-.5px; }
+  .cat-head p{ margin: 4px 0 0; color: var(--muted); font-size:14px; }
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; }
+  .filters button{
+    font-family:"Inter"; font-weight:600; font-size:13px; cursor:pointer;
+    background: var(--card); border:1.5px solid var(--line); color: var(--ink);
+    padding: 7px 13px; border-radius: 20px;
+  }
+  .filters button.active{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .grid{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+    gap: 18px; padding-bottom: 50px;
+  }
+  .card{
+    background: var(--card); border: 2px solid var(--ink); border-radius: 14px;
+    overflow:hidden; display:flex; flex-direction:column;
+    transition: transform .06s ease, box-shadow .06s ease;
+  }
+  .card:hover{ transform: translateY(-3px); box-shadow: 5px 5px 0 var(--flame); }
+  .car-stage{
+    background:
+      linear-gradient(180deg, #fff 0%, var(--paper-2) 100%);
+    border-bottom: 2px solid var(--ink);
+    padding: 18px 8px 8px; position:relative;
+  }
+  .car-stage .yr{
+    position:absolute; top:10px; left:10px; background: var(--ink); color: var(--paper);
+    font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:1px;
+  }
+  .car-stage svg{ display:block; margin: 0 auto; width: 92%; height:auto; }
+  .card-body{ padding: 13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .card-body .series{ font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--flame); }
+  .card-body h4{ font-family:"Archivo Black"; font-size:16px; margin:0; letter-spacing:-.3px; }
+  .card-body .meta{ font-size:12.5px; color: var(--muted); margin:0; }
+  .price-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:10px; }
+  .price{ font-family:"Archivo Black"; font-size:18px; }
+  .price span{ font-size:12px; color: var(--muted); font-family:"Inter"; font-weight:600; display:block; letter-spacing:.5px; }
+  .card .btn-order{ padding: 8px 11px; font-size:12.5px; box-shadow:2px 2px 0 var(--ink); }
+
+  /* ---- about / contact ---- */
+  .strip{ border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background: var(--ink); color: var(--paper); }
+  .strip .wrap{ display:flex; gap:30px; flex-wrap:wrap; justify-content:space-between; padding: 26px 20px; align-items:center; }
+  .strip h3{ font-family:"Archivo Black"; margin:0 0 6px; font-size:22px; }
+  .strip p{ margin:0; color:#cdc7ba; font-size:14px; max-width: 560px; line-height:1.5; }
+
+  footer{ padding: 28px 0 40px; color: var(--muted); font-size:13px; }
+  footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center; }
+  footer a{ color: var(--ink); text-decoration: none; font-weight:600; }
+  footer .powered{ font-weight:600; }
+  footer .powered b{ color: var(--flame); }
+
+  @media (max-width: 760px){
+    .hero-inner{ grid-template-columns: 1fr; }
+    nav a:not(.btn-order){ display:none; }
+    .menu-btn{ display:inline-flex; }
+    .hero-art{ box-shadow: 4px 4px 0 var(--flame); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="#top">
+      <span class="flame">AH</span>
+      <span>
+        <h1>AHCollector</h1>
+        <small>Hot Wheels Koleksiyonu</small>
+      </span>
+    </a>
+    <nav>
+      <a href="#koleksiyon">Koleksiyon</a>
+      <a href="#hakkinda">Hakkımızda</a>
+      <a href="#iletisim">İletişim</a>
+      <a class="btn-order" href="#">Şipariş Ver</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç/kapat">☰</button>
+    </nav>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#koleksiyon">Koleksiyon</a>
+    <a href="#hakkinda">Hakkımızda</a>
+    <a href="#iletisim">İletişim</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow">Gerçek koleksiyon parçaları</span>
+      <h2>Topladığımız değil, peşinde olduğunuz arabalar.</h2>
+      <p>AHCollector olarak nadir Hot Wheels modellerini tek tek ayıklıyor, durumunu kontrol edip sizinle buluşturuyoruz. Mainline'dan Premium'a, eski serilerden yeni çıkarlara kadar geniş bir raftan seçiyoruz.</p>
+      <a class="btn-order" href="#">Şipariş Ver</a>
+      <div class="hero-note">"Stoklar anlık değişir — beğendiyseniz hemen sipariş verin, biz ayırırız."</div>
+    </div>
+    <div class="hero-art">
+      <span class="tag">NEW DROP</span>
+      <div class="shelf" id="heroShelf"></div>
+    </div>
+  </div>
+</section>
+
+<section id="koleksiyon">
+  <div class="wrap">
+    <div class="cat-head">
+      <div>
+        <h3>Koleksiyon</h3>
+        <p>Raflardaki modeller. Üzerine tıklayıp sipariş verebilirsin.</p>
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="strip" id="hakkinda">
+  <div class="wrap">
+    <div>
+      <h3>Neden AHCollector?</h3>
+      <p>Her araba tek tek elden geçer. Kutulu mu, çıkmış mı, boya çiziği var mı — fotoğraftan önce biz söyleriz. Küçük bir işletmeyiz, o yüzden ilgilendiğin modeli sorduğunda gerçek birinden cevap alırsın.</p>
+    </div>
+    <a class="btn-order" href="#">Şipariş Ver</a>
+  </div>
+</section>
+
+<footer id="iletisim">
+  <div class="wrap">
+    <div>© 2026 AHCollector — Hot Wheels tutkunları için.</div>
+    <div>
+      <a href="#">Instagram</a> · <a href="#">WhatsApp</a> · <a href="#">Sipariş</a>
+      &nbsp;|&nbsp; <span class="powered">Powered By <b>EzWinStudio</b></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Hot Wheels yarı-gerçek veri ----
+  const CARS = [
+    { name:"'67 Camaro", series:"Premium", year:2021, color:"#d11f2a", price:"185", meta:"Mattel Premium · Kutulu" },
+    { name:"Twin Mill", series:"Legends", year:2019, color:"#1d6fb8", price:"320", meta:"40. Yıl · Metal gövde" },
+    { name:"Bone Shaker", series:"Premium", year:2022, color:"#111111", price:"240", meta:"Gasırlı motor · Kutulu" },
+    { name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Mainline · Çıkmış" },
+    { name:"McLaren 720S", series:"Premium", year:2023, color:"#ff5a00", price:"210", meta:"TH候选 · Kutulu" },
+    { name:"'71 El Camino", series:"Mainline", year:2018, color:"#2e7d32", price:"110", meta:"Mainline · Kutulu" },
+    { name:"Silhouette", series:"Legends", year:2021, color:"#6a1b9a", price:"175", meta:"Legends · Metal" },
+    { name:"'32 Ford", series:"Premium", year:2017, color:"#b71c1c", price:"265", meta:"Klasik · Kutulu" },
+    { name:"Bugaratti", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Mainline · Yeni" },
+    { name:"Jet Threat", series:"Premium", year:2022, color:"#37474f", price:"230", meta:"TH · Kutulu" },
+    { name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Mainline · Çıkmış" },
+    { name:"'70 Corvette", series:"Legends", year:2020, color:"#e53935", price:"195", meta:"Legends · Kutulu" }
+  ];
+
+  // ---- araba SVG'si (renkli gövde) ----
+  function carSVG(color){
+    return `
+    <svg viewBox="0 0 200 90" role="img" aria-label="Hot Wheels araba">
+      <ellipse cx="100" cy="80" rx="86" ry="6" fill="rgba(0,0,0,.12)"/>
+      <path d="M18 60 Q20 40 48 38 L70 36 Q82 22 104 22 L138 24 Q160 28 170 44 L182 48 Q188 50 188 58 L188 64 Q188 70 180 70 L24 70 Q16 70 16 62 Z"
+            fill="${color}" stroke="#0e0e10" stroke-width="3"/>
+      <path d="M74 36 Q84 26 102 26 L132 28 Q150 30 158 44 L74 44 Z" fill="#bfe3ff" stroke="#0e0e10" stroke-width="2.5"/>
+      <path d="M104 27 L132 29 L150 44 L104 44 Z" fill="#9cc9ee" stroke="#0e0e10" stroke-width="2"/>
+      <circle cx="60" cy="70" r="15" fill="#1a1a1a" stroke="#0e0e10" stroke-width="3"/>
+      <circle cx="60" cy="70" r="6" fill="#d8d8d8"/>
+      <circle cx="148" cy="70" r="15" fill="#1a1a1a" stroke="#0e0e10" stroke-width="3"/>
+      <circle cx="148" cy="70" r="6" fill="#d8d8d8"/>
+      <rect x="182" y="52" width="9" height="9" rx="2" fill="#ffd54f" stroke="#0e0e10" stroke-width="2"/>
+    </svg>`;
+  }
+
+  const ORDER_URL = "#"; // TODO: gerçek sipariş linkiyle değiştir
+
+  // ---- hero rafı ----
+  const heroShelf = document.getElementById("heroShelf");
+  CARS.slice(0,4).forEach(c=>{
+    const d = document.createElement("div");
+    d.style.width = "22%";
+    d.innerHTML = carSVG(c.color);
+    heroShelf.appendChild(d);
+  });
+
+  // ---- filtreler ----
+  const filtersEl = document.getElementById("filters");
+  const series = ["Tümü", ...Array.from(new Set(CARS.map(c=>c.series)))];
+  let active = "Tümü";
+  series.forEach(s=>{
+    const b = document.createElement("button");
+    b.textContent = s;
+    if(s===active) b.classList.add("active");
+    b.onclick = ()=>{ active=s; [...filtersEl.children].forEach(x=>x.classList.remove("active")); b.classList.add("active"); render(); };
+    filtersEl.appendChild(b);
+  });
+
+  // ---- kartlar ----
+  const grid = document.getElementById("grid");
+  function render(){
+    grid.innerHTML = "";
+    CARS.filter(c=> active==="Tümü" || c.series===active).forEach(c=>{
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="car-stage">
+          <span class="yr">${c.year}</span>
+          ${carSVG(c.color)}
+        </div>
+        <div class="card-body">
+          <div class="series">${c.series}</div>
+          <h4>${c.name}</h4>
+          <p class="meta">${c.meta}</p>
+          <div class="price-row">
+            <div class="price">₺${c.price}<span>KDV dahil</span></div>
+            <a class="btn-order" href="${ORDER_URL}">Şipariş Ver</a>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+  render();
+
+  // ---- mobil menü ----
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileNav = document.getElementById("mobileNav");
+  menuBtn.addEventListener("click", () => mobileNav.classList.toggle("open"));
+  mobileNav.querySelectorAll("a").forEach(a =>
+    a.addEventListener("click", () => mobileNav.classList.remove("open"))
+  );
+</script>
+</body>
+</html>
+
     --ink: #14130f;
     --paper: #f3efe6;
     --paper-2: #e7e1d4;
