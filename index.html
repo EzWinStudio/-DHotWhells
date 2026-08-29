@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW Collector | Hot Wheels E-Ticaret</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hwOrange: '#FF6600',
+                        darkBg: '#121212',
+                        cardBg: '#1E1E1E'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- İkonlar için FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-darkBg text-gray-200 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-black/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-fire-flame-curved text-hwOrange text-2xl"></i>
+                    <span class="font-bold text-xl tracking-wider text-white">HW<span class="text-hwOrange">COLLECTOR</span></span>
+                </div>
+                
+                <!-- Arama -->
+                <div class="hidden md:block flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <input type="text" class="w-full bg-gray-900 border border-gray-700 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-hwOrange transition" placeholder="Model, seri veya yıl ara...">
+                        <div class="absolute left-3 top-2.5 text-gray-500">
+                            <i class="fa-solid fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sepet Butonu -->
+                <div class="flex items-center">
+                    <button onclick="toggleCart()" class="relative text-gray-300 hover:text-hwOrange transition p-2">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        <span id="cartCount" class="absolute top-0 right-0 -mt-1 -mr-1 bg-hwOrange text-white text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-gray-900 overflow-hidden border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
+                    Efsanevi Modelleri <span class="text-hwOrange">Koleksiyonuna Ekle</span>
+                </h1>
+                <p class="mt-4 text-xl text-gray-400 max-w-2xl mx-auto">
+                    Nadir bulunan Treasure Hunt serileri, Premium setler ve özel üretim JDM modelleri şimdi stoklarda.
+                </p>
+                <div class="mt-8">
+                    <button class="bg-hwOrange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-orange-500/30 transition transform hover:-translate-y-1">
+                        Koleksiyonu Keşfet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8">
+        
+        <!-- Sidebar Filtreler -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="bg-cardBg p-6 rounded-xl border border-gray-800 sticky top-24">
+                <h3 class="text-lg font-bold text-white mb-4 border-b border-gray-700 pb-2">Kategoriler</h3>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li class="flex justify-between items-center cursor-pointer hover:text-hwOrange transition">
+                        <span>Car Culture (Premium)</span>
+                        <span class="bg-gray-800 px-2 py-0.5 rounded text-xs">12</span>
+                    </li>
+                    <li class="flex justify-between items-center cursor-pointer hover:text-hwOrange transition">
+                        <span>Treasure Hunt ($TH)</span>
+                        <span class="bg-gray-800 px-2 py-0.5 rounded text-xs">4</span>
+                    </li>
+                    <li class="flex justify-between items-center cursor-pointer hover:text-hwOrange transition">
+                        <span>Mainline (Standart)</span>
+                        <span class="bg-gray-800 px-2 py-0.5 rounded text-xs">86</span>
+                    </li>
+                    <li class="flex justify-between items-center cursor-pointer hover:text-hwOrange transition">
+                        <span>Team Transport</span>
+                        <span class="bg-gray-800 px-2 py-0.5 rounded text-xs">7</span>
+                    </li>
+                </ul>
+
+                <h3 class="text-lg font-bold text-white mt-8 mb-4 border-b border-gray-700 pb-2">Fiyat Aralığı</h3>
+                <input type="range" class="w-full accent-hwOrange" min="50" max="2000">
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>50 ₺</span>
+                    <span>2000+ ₺</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Ürün Grid -->
+        <main class="flex-1">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">Öne Çıkan Modeller</h2>
+                <select class="bg-cardBg border border-gray-700 text-gray-300 text-sm rounded-lg py-2 px-3 focus:outline-none focus:border-hwOrange">
+                    <option>En Yeniler</option>
+                    <option>Fiyata Göre Artan</option>
+                    <option>Fiyata Göre Azalan</option>
+                </select>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Ürünler JS ile buraya yüklenecek -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Sepet Çekmecesi (Right Sidebar) -->
+    <div id="cartDrawer" class="fixed inset-y-0 right-0 w-full md:w-96 bg-cardBg border-l border-gray-800 transform translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-2xl flex flex-col">
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-cart-shopping mr-2 text-hwOrange"></i> Sepetim</h2>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        
+        <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Sepet öğeleri buraya gelecek -->
+            <div class="text-center text-gray-500 mt-10" id="emptyCartMsg">Sepetiniz şu an boş.</div>
+        </div>
+
+        <div class="p-6 border-t border-gray-800 bg-gray-900/50">
+            <div class="flex justify-between text-lg mb-4 text-white">
+                <span class="font-bold">Toplam:</span>
+                <span id="cartTotal" class="font-bold text-hwOrange">0 ₺</span>
+            </div>
+            <button class="w-full bg-hwOrange hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition">
+                Siparişi Tamamla
+            </button>
+        </div>
+    </div>
+
+    <!-- Siyah arkaplan overlay (Sepet açıldığında) -->
+    <div id="cartOverlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- JavaScript Mantığı -->
+    <script>
+        // Örnek Ürün Verileri
+        const products = [
+            {
+                id: 1,
+                name: "Nissan Skyline GT-R (R34)",
+                series: "Car Culture",
+                badge: "Premium",
+                price: 450,
+                image: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?q=80&w=600&auto=format&fit=crop" // Temsili görsel
+            },
+            {
+                id: 2,
+                name: "'67 Camaro",
+                series: "Treasure Hunt",
+                badge: "$TH",
+                price: 1250,
+                image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: 3,
+                name: "Porsche 911 GT3 RS",
+                series: "Mainline",
+                badge: "",
+                price: 120,
+                image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: 4,
+                name: "Custom '72 Datsun 240Z",
+                series: "Car Culture",
+                badge: "Premium",
+                price: 400,
+                image: "https://images.unsplash.com/photo-1614200179396-2bdb77bc9829?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: 5,
+                name: "Mazda RX-7",
+                series: "Mainline",
+                badge: "",
+                price: 150,
+                image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: 6,
+                name: "Mercedes-Benz 300 SL",
+                series: "Jay Leno's Garage",
+                badge: "Premium",
+                price: 480,
+                image: "https://images.unsplash.com/photo-1563720225384-98616710281f?q=80&w=600&auto=format&fit=crop"
+            }
+        ];
+
+        let cart = [];
+
+        // Ürünleri Ekrana Çizme
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            products.forEach(product => {
+                const badgeHTML = product.badge ? `<span class="absolute top-3 right-3 bg-hwOrange text-white text-xs font-bold px-2 py-1 rounded shadow">${product.badge}</span>` : '';
+                
+                const card = `
+                    <div class="bg-cardBg rounded-xl overflow-hidden border border-gray-800 hover:border-hwOrange transition duration-300 group shadow-lg">
+                        <div class="relative h-48 overflow-hidden bg-gray-800">
+                            ${badgeHTML}
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80 group-hover:opacity-100">
+                        </div>
+                        <div class="p-5">
+                            <p class="text-xs text-gray-400 mb-1 tracking-wider uppercase">${product.series}</p>
+                            <h3 class="text-lg font-bold text-white mb-2 leading-tight h-12">${product.name}</h3>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-xl font-bold text-hwOrange">${product.price} ₺</span>
+                                <button onclick="addToCart(${product.id})" class="bg-gray-800 hover:bg-hwOrange text-white p-2 rounded-lg transition">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // Sepete Ürün Ekleme
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push(product);
+            updateCartUI();
+            
+            // Sepeti otomatik aç (Kullanıcı deneyimi için)
+            if(document.getElementById('cartDrawer').classList.contains('translate-x-full')) {
+                toggleCart();
+            }
+        }
+
+        // Sepetten Ürün Silme
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // Sepet Arayüzünü Güncelleme
+        function updateCartUI() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+            const emptyCartMsg = document.getElementById('emptyCartMsg');
+
+            cartCount.innerText = cart.length;
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="text-center text-gray-500 mt-10" id="emptyCartMsg">Sepetiniz şu an boş.</div>';
+                cartTotal.innerText = '0 ₺';
+                return;
+            }
+
+            cartItemsDiv.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                cartItemsDiv.innerHTML += `
+                    <div class="flex gap-4 bg-gray-900 p-3 rounded-lg border border-gray-800">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded bg-gray-800">
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-white">${item.name}</h4>
+                            <p class="text-hwOrange font-bold mt-1">${item.price} ₺</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-red-500 transition px-2">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cartTotal.innerText = total + ' ₺';
+        }
+
+        // Sepet Çekmecesini Açma/Kapama
+        function toggleCart() {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            
+            if (drawer.classList.contains('translate-x-full')) {
+                // Aç
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                // Kısa bir gecikme ile opacity ekle (animasyon için)
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                // Kapat
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // Sayfa yüklendiğinde ürünleri çiz
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>
