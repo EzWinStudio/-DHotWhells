@@ -159,7 +159,9 @@
   .filters button.active{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
   /* ---- arama ---- */
+  .search-row{ border-top: 1px solid var(--paper-2); background: var(--paper); padding: 10px 0; }
   .search-box{ position: relative; margin: 4px 0 0; flex: 1 1 100%; max-width: 340px; }
+  .search-row .search-box{ margin: 0; max-width: 100%; flex: none; }
   .search-box input{
     width: 100%; font-family:"Inter"; font-size:14px; color: var(--ink);
     background: var(--card); border:2px solid var(--ink); border-radius: 10px;
@@ -265,6 +267,14 @@
       <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç/kapat">☰</button>
     </nav>
   </div>
+  <div class="search-row">
+    <div class="wrap">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search" type="text" placeholder="Model ya da seri ara…" aria-label="Ara" />
+      </div>
+    </div>
+  </div>
   <div class="mobile-nav" id="mobileNav">
     <a href="#koleksiyon">Koleksiyon</a>
     <a href="#hakkinda">Hakkımızda</a>
@@ -296,10 +306,6 @@
         <p>Raflardaki modeller. Üzerine tıklayıp sipariş verebilirsin.</p>
       </div>
       <div class="filters" id="filters"></div>
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input id="search" type="text" placeholder="Model ya da seri ara…" aria-label="Ara" />
-      </div>
     </div>
     <div class="grid" id="grid"></div>
   </div>
