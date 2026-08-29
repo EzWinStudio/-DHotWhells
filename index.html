@@ -94,6 +94,22 @@
 
   /* ---- animasyonlar ---- */
   @keyframes fadeUp{ from{ opacity:0; transform: translateY(26px); } to{ opacity:1; transform: translateY(0); } }
+
+  /* ---- animasyonlu arka plan ---- */
+  .bg-anim{ position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .bg-anim span{
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: .40;
+    animation: drift 20s ease-in-out infinite;
+  }
+  .bg-anim .b1{ width: 440px; height: 440px; background: var(--flame);    top: -120px; left: -90px; }
+  .bg-anim .b2{ width: 400px; height: 400px; background: var(--c-premium); bottom: -130px; right: -70px; animation-delay: -7s; }
+  .bg-anim .b3{ width: 340px; height: 340px; background: var(--c-legends); top: 38%; left: 52%; animation-delay: -13s; opacity:.30; }
+  @keyframes drift{
+    0%   { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(45px,35px) scale(1.12); }
+    66%  { transform: translate(-35px,25px) scale(.93); }
+    100% { transform: translate(0,0) scale(1); }
+  }
   .reveal{ opacity:0; }
   .reveal.in{ animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) forwards; }
 
@@ -114,6 +130,7 @@
   @media (prefers-reduced-motion: reduce){
     .reveal{ opacity:1; } .reveal.in{ animation:none; }
     .hero-art .shelf > div, .hero-art .tag, .card, .btn-order{ animation:none; }
+    .bg-anim span{ animation:none; }
   }
 
   /* ---- buttons ---- */
@@ -272,6 +289,12 @@
 </style>
 </head>
 <body>
+
+<div class="bg-anim" aria-hidden="true">
+  <span class="b1"></span>
+  <span class="b2"></span>
+  <span class="b3"></span>
+</div>
 
 <header>
   <div class="top-accent"></div>
