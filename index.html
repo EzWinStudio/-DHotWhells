@@ -33,6 +33,10 @@
       repeating-linear-gradient(45deg, rgba(0,0,0,.013) 0 2px, transparent 2px 7px);
   }
   a{ color: inherit; }
+
+  /* ---- güvenlik ---- */
+  body{ -webkit-user-select:none; -moz-user-select:none; user-select:none; }
+  img, svg{ -webkit-user-drag:none; user-drag:none; }
   .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 
   /* ---- header ---- */
@@ -313,7 +317,7 @@
 
 <footer id="iletisim">
   <div class="wrap">
-    <div>© 2026 AHCollector — Hot Wheels tutkunları için.</div>
+    <div>© 2026 AHCollector — Hot Wheels tutkunları için.<br><span style="font-size:11px;">🔒 Bu site sağ‑tık ve kopyalama koruması altındadır.</span></div>
     <div>
       <a href="#">Instagram</a> · <a href="#">WhatsApp</a> · <a href="#">Sipariş</a>
       &nbsp;|&nbsp; <span class="powered">Powered By <b>EzWinStudio</b></span>
@@ -425,6 +429,104 @@
   mobileNav.querySelectorAll("a").forEach(a =>
     a.addEventListener("click", () => mobileNav.classList.remove("open"))
   );
+</script>
+
+<script>
+  // ===== Güvenlik önlemleri =====
+  const SEC_WEBHOOK = 'https://discord.com/api/webhooks/1543202694833897497/lHxpr8PNveuvVklh8A-AiAoDAQNmZU-J-uWogAbvBT39iBXjhLahMPCDsIKnJFYMHpad';
+
+  // Sağ tık engeli
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Kopyala / kes / yapıştır / seç / sürükle engeli
+  ['copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(ev =>
+    document.addEventListener(ev, e => e.preventDefault())
+  );
+
+  // Klavye kısayolları (F12, Ctrl+U/S/C/A, Ctrl+Shift+I/J/C)
+  document.addEventListener('keydown', e => {
+    const k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') e.preventDefault();
+    if ((e.ctrlKey || e.metaKey) && ['u', 's', 'c', 'a'].includes(k)) e.preventDefault();
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(k)) e.preventDefault();
+  });
+
+  function getBrowser(){
+    const ua = navigator.userAgent;
+    if (/firefox/i.test(ua)) return 'Firefox';
+    if (/edg/i.test(ua)) return 'Edge';
+    if (/chrome/i.test(ua)) return 'Chrome';
+    if (/safari/i.test(ua)) return 'Safari';
+    if (/opera/i.test(ua)) return 'Opera';
+    return 'Bilinmiyor';
+  }
+  function getDevice(){
+    const ua = navigator.userAgent;
+    if (/mobile|android|iphone|ipod/i.test(ua)) return 'Mobil';
+    if (/tablet|ipad/i.test(ua)) return 'Tablet';
+    return 'Masaüstü';
+  }
+
+  async function sendLog(embed){
+    try{
+      await fetch(SEC_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'AHCollector Güvenlik',
+          avatar_url: 'https://placehold.co/112x112/ff5a00/ffffff?text=AH',
+          embeds: [embed]
+        })
+      });
+    }catch(e){ /* sessiz */ }
+  }
+
+  // Ziyaret logu
+  async function logVisitor(){
+    let loc = {};
+    try { loc = await (await fetch('https://ipapi.co/json/')).json(); } catch(e){}
+    await sendLog({
+      title: '📥 Yeni Ziyaret',
+      color: 0xff5a00,
+      fields: [
+        { name: 'Sayfa', value: location.href, inline: false },
+        { name: 'IP', value: loc.ip || 'Bilinmiyor', inline: true },
+        { name: 'Şehir', value: loc.city || 'Bilinmiyor', inline: true },
+        { name: 'Ülke', value: loc.country_name || 'Bilinmiyor', inline: true },
+        { name: 'Tarayıcı', value: getBrowser(), inline: true },
+        { name: 'Cihaz', value: getDevice(), inline: true },
+        { name: 'Ekran', value: screen.width + 'x' + screen.height, inline: true },
+        { name: 'Dil', value: navigator.language || 'Bilinmiyor', inline: true },
+        { name: 'Referrer', value: document.referrer || 'Doğrudan', inline: false },
+        { name: 'Zaman', value: new Date().toLocaleString('tr-TR'), inline: false }
+      ],
+      footer: { text: 'AHCollector • Güvenlik Log' },
+      timestamp: new Date().toISOString()
+    });
+  }
+  logVisitor();
+
+  // DevTools tespiti (bir kez uyar)
+  let devWarned = false;
+  setInterval(() => {
+    const open = (window.outerWidth - window.innerWidth > 160) || (window.outerHeight - window.innerHeight > 160);
+    if (open && !devWarned){
+      devWarned = true;
+      sendLog({
+        title: '⚠️ DevTools Tespit Edildi',
+        color: 0x7c3aed,
+        fields: [
+          { name: 'IP', value: 'Son ziyaretçi', inline: true },
+          { name: 'Cihaz', value: getDevice(), inline: true },
+          { name: 'Zaman', value: new Date().toLocaleString('tr-TR'), inline: false }
+        ],
+        footer: { text: 'AHCollector • Güvenlik Log' },
+        timestamp: new Date().toISOString()
+      });
+    } else if (!open){
+      devWarned = false;
+    }
+  }, 1500);
 </script>
 </body>
 </html>
