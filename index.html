@@ -164,7 +164,7 @@
                 series: "Car Culture",
                 badge: "Premium",
                 price: 450,
-                image: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?q=80&w=600&auto=format&fit=crop" // Temsili görsel
+                image: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?q=80&w=600&auto=format&fit=crop"
             },
             {
                 id: 2,
@@ -220,18 +220,23 @@
                 
                 const card = `
                     <div class="bg-cardBg rounded-xl overflow-hidden border border-gray-800 hover:border-hwOrange transition duration-300 group shadow-lg">
-                        <div class="relative h-48 overflow-hidden bg-gray-800">
+                        <div class="relative h-56 overflow-hidden bg-gray-800">
                             ${badgeHTML}
                             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80 group-hover:opacity-100">
                         </div>
                         <div class="p-5">
                             <p class="text-xs text-gray-400 mb-1 tracking-wider uppercase">${product.series}</p>
-                            <h3 class="text-lg font-bold text-white mb-2 leading-tight h-12">${product.name}</h3>
+                            <h3 class="text-lg font-bold text-white mb-2 leading-tight h-14">${product.name}</h3>
                             <div class="flex justify-between items-center mt-4">
                                 <span class="text-xl font-bold text-hwOrange">${product.price} ₺</span>
-                                <button onclick="addToCart(${product.id})" class="bg-gray-800 hover:bg-hwOrange text-white p-2 rounded-lg transition">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
+                                <div class="flex gap-2">
+                                    <button onclick="addToCart(${product.id}, 'car_culture')" class="bg-hwOrange hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2">
+                                        <i class="fa-solid fa-plus"></i> Ekle
+                                    </button>
+                                    <button onclick="addToCart(${product.id}, 'treasure_hunt')" class="bg-gray-800 hover:bg-hwOrange text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2">
+                                        <i class="fa-solid fa-star"></i> Detay
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -241,9 +246,11 @@
         }
 
         // Sepete Ürün Ekleme
-        function addToCart(productId) {
+        function addToCart(productId, category) {
             const product = products.find(p => p.id === productId);
-            cart.push(product);
+            if (!product) return;
+            
+            cart.push({ ...product, category });
             updateCartUI();
             
             // Sepeti otomatik aç (Kullanıcı deneyimi için)
@@ -280,10 +287,11 @@
                 total += item.price;
                 cartItemsDiv.innerHTML += `
                     <div class="flex gap-4 bg-gray-900 p-3 rounded-lg border border-gray-800">
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded bg-gray-800">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded bg-gray-800">
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-white">${item.name}</h4>
                             <p class="text-hwOrange font-bold mt-1">${item.price} ₺</p>
+                            <p class="text-xs text-gray-400">${item.category}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-red-500 transition px-2">
                             <i class="fa-solid fa-trash"></i>
