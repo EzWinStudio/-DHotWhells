@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HW Collector | Hot Wheels E-Ticaret</title>
+    <title>AHCollector | Hot Wheels E-Ticaret</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,10 +28,13 @@
     <nav class="bg-black/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
+                <!-- Logo (AHCollector) -->
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-fire-flame-curved text-hwOrange text-2xl"></i>
-                    <span class="font-bold text-xl tracking-wider text-white">HW<span class="text-hwOrange">COLLECTOR</span></span>
+                    <a href="#" class="relative">
+                        <img src="https://ibb.co/20zfZFXm" alt="AHCollector Logo" class="h-6 w-auto">
+                    </a>
+                    <!-- optional fallback text if image fails -->
+                    <!-- <span class="font-bold text-xl tracking-wider text-white hidden">AH<span class="text-hwOrange">COLLECTOR</span></span> -->
                 </div>
                 
                 <!-- Arama -->
@@ -44,12 +47,13 @@
                     </div>
                 </div>
 
-                <!-- Sepet Butonu -->
+                <!-- Sipariş Ver Butonu (yerine cart butonu) -->
                 <div class="flex items-center">
-                    <button onclick="toggleCart()" class="relative text-gray-300 hover:text-hwOrange transition p-2">
-                        <i class="fa-solid fa-cart-shopping text-xl"></i>
-                        <span id="cartCount" class="absolute top-0 right-0 -mt-1 -mr-1 bg-hwOrange text-white text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
-                    </button>
+                    <a href="https://example.com/order" target="_blank" 
+                       class="relative inline-block text-white hover:text-hwOrange transition p-2 rounded-lg bg-hwOrange shadow-lg shadow-orange-500/30">
+                        <i class="fa-solid fa-handshake text-xl mr-2"></i>
+                        Sipariş Ver
+                    </a>
                 </div>
             </div>
         </div>
@@ -126,35 +130,7 @@
         </main>
     </div>
 
-    <!-- Sepet Çekmecesi (Right Sidebar) -->
-    <div id="cartDrawer" class="fixed inset-y-0 right-0 w-full md:w-96 bg-cardBg border-l border-gray-800 transform translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-2xl flex flex-col">
-        <div class="p-6 border-b border-gray-800 flex justify-between items-center">
-            <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-cart-shopping mr-2 text-hwOrange"></i> Sepetim</h2>
-            <button onclick="toggleCart()" class="text-gray-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-2xl"></i>
-            </button>
-        </div>
-        
-        <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <!-- Sepet öğeleri buraya gelecek -->
-            <div class="text-center text-gray-500 mt-10" id="emptyCartMsg">Sepetiniz şu an boş.</div>
-        </div>
-
-        <div class="p-6 border-t border-gray-800 bg-gray-900/50">
-            <div class="flex justify-between text-lg mb-4 text-white">
-                <span class="font-bold">Toplam:</span>
-                <span id="cartTotal" class="font-bold text-hwOrange">0 ₺</span>
-            </div>
-            <button class="w-full bg-hwOrange hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition">
-                Siparişi Tamamla
-            </button>
-        </div>
-    </div>
-
-    <!-- Siyah arkaplan overlay (Sepet açıldığında) -->
-    <div id="cartOverlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
-
-    <!-- JavaScript Mantığı -->
+    <!-- JavaScript Mantığı (sadece ürün gösterimi ve sipariş butonu) -->
     <script>
         // Örnek Ürün Verileri
         const products = [
@@ -200,15 +176,13 @@
             },
             {
                 id: 6,
-                name: "Mercedes-Benz 300 SL",
+                name: "Mercedes‑Benz 300 SL",
                 series: "Jay Leno's Garage",
                 badge: "Premium",
                 price: 480,
                 image: "https://images.unsplash.com/photo-1563720225384-98616710281f?q=80&w=600&auto=format&fit=crop"
             }
         ];
-
-        let cart = [];
 
         // Ürünleri Ekrana Çizme
         function renderProducts() {
@@ -220,23 +194,18 @@
                 
                 const card = `
                     <div class="bg-cardBg rounded-xl overflow-hidden border border-gray-800 hover:border-hwOrange transition duration-300 group shadow-lg">
-                        <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <div class="relative h-48 overflow-hidden bg-gray-800">
                             ${badgeHTML}
                             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80 group-hover:opacity-100">
                         </div>
                         <div class="p-5">
                             <p class="text-xs text-gray-400 mb-1 tracking-wider uppercase">${product.series}</p>
-                            <h3 class="text-lg font-bold text-white mb-2 leading-tight h-14">${product.name}</h3>
+                            <h3 class="text-lg font-bold text-white mb-2 leading-tight h-12">${product.name}</h3>
                             <div class="flex justify-between items-center mt-4">
                                 <span class="text-xl font-bold text-hwOrange">${product.price} ₺</span>
-                                <div class="flex gap-2">
-                                    <button onclick="addToCart(${product.id}, 'car_culture')" class="bg-hwOrange hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2">
-                                        <i class="fa-solid fa-plus"></i> Ekle
-                                    </button>
-                                    <button onclick="addToCart(${product.id}, 'treasure_hunt')" class="bg-gray-800 hover:bg-hwOrange text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2">
-                                        <i class="fa-solid fa-star"></i> Detay
-                                    </button>
-                                </div>
+                                <button onclick="addToCart(${product.id})" class="bg-gray-800 hover:bg-hwOrange text-white p-2 rounded-lg transition">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -245,81 +214,10 @@
             });
         }
 
-        // Sepete Ürün Ekleme
-        function addToCart(productId, category) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            cart.push({ ...product, category });
-            updateCartUI();
-            
-            // Sepeti otomatik aç (Kullanıcı deneyimi için)
-            if(document.getElementById('cartDrawer').classList.contains('translate-x-full')) {
-                toggleCart();
-            }
-        }
-
-        // Sepetten Ürün Silme
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        // Sepet Arayüzünü Güncelleme
-        function updateCartUI() {
-            const cartItemsDiv = document.getElementById('cartItems');
-            const cartCount = document.getElementById('cartCount');
-            const cartTotal = document.getElementById('cartTotal');
-            const emptyCartMsg = document.getElementById('emptyCartMsg');
-
-            cartCount.innerText = cart.length;
-
-            if (cart.length === 0) {
-                cartItemsDiv.innerHTML = '<div class="text-center text-gray-500 mt-10" id="emptyCartMsg">Sepetiniz şu an boş.</div>';
-                cartTotal.innerText = '0 ₺';
-                return;
-            }
-
-            cartItemsDiv.innerHTML = '';
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                total += item.price;
-                cartItemsDiv.innerHTML += `
-                    <div class="flex gap-4 bg-gray-900 p-3 rounded-lg border border-gray-800">
-                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded bg-gray-800">
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-white">${item.name}</h4>
-                            <p class="text-hwOrange font-bold mt-1">${item.price} ₺</p>
-                            <p class="text-xs text-gray-400">${item.category}</p>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-red-500 transition px-2">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            });
-
-            cartTotal.innerText = total + ' ₺';
-        }
-
-        // Sepet Çekmecesini Açma/Kapama
-        function toggleCart() {
-            const drawer = document.getElementById('cartDrawer');
-            const overlay = document.getElementById('cartOverlay');
-            
-            if (drawer.classList.contains('translate-x-full')) {
-                // Aç
-                drawer.classList.remove('translate-x-full');
-                overlay.classList.remove('hidden');
-                // Kısa bir gecikme ile opacity ekle (animasyon için)
-                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            } else {
-                // Kapat
-                drawer.classList.add('translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
+        // Sepete Ürün Ekleme (hâlâ mevcut ama görsel olarak cart drawer yok)
+        function addToCart(productId) {
+            // Basit bir uyarı gösteriyoruz; gerçek bir sepet işlemi yapılmıyor.
+            alert(`${products.find(p => p.id === productId).name} sepete eklendi!`);
         }
 
         // Sayfa yüklendiğinde ürünleri çiz
