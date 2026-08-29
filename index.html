@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
   :root{
     --flame: #ff5a00;
@@ -17,6 +18,9 @@
     --line: #2a2722;
     --muted: #6f685c;
     --card: #fbf9f4;
+    --c-premium: #7c3aed;
+    --c-legends: #0ea5e9;
+    --c-mainline: #16a34a;
   }
   *{ box-sizing: border-box; }
   html,body{ margin:0; padding:0; }
@@ -32,6 +36,13 @@
   .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 
   /* ---- header ---- */
+  .top-accent{
+    height: 4px;
+    background: linear-gradient(90deg, var(--flame), var(--c-premium), var(--c-legends), var(--flame-2), var(--flame));
+    background-size: 200% 100%;
+    animation: slideAccent 8s linear infinite;
+  }
+  @keyframes slideAccent { from{ background-position:0 0; } to{ background-position:200% 0; } }
   header{
     border-bottom: 2px solid var(--ink);
     background: var(--paper);
@@ -111,7 +122,11 @@
     border-left: 3px solid var(--flame); padding-left: 12px; font-style: italic;
   }
   .hero-art{
-    background: var(--ink); border:2px solid var(--ink); border-radius: 16px;
+    background:
+      radial-gradient(circle at 25% 15%, rgba(255,90,0,.30), transparent 55%),
+      radial-gradient(circle at 85% 85%, rgba(124,58,237,.35), transparent 55%),
+      linear-gradient(135deg, #1a1530, #241a12);
+    border:2px solid var(--ink); border-radius: 16px;
     padding: 22px; box-shadow: 6px 6px 0 var(--flame);
     position: relative; overflow:hidden;
   }
@@ -134,8 +149,21 @@
     font-family:"Inter"; font-weight:600; font-size:13px; cursor:pointer;
     background: var(--card); border:1.5px solid var(--line); color: var(--ink);
     padding: 7px 13px; border-radius: 20px;
+    transition: background .12s ease, color .12s ease;
   }
+  .filters button:hover{ background: var(--paper-2); }
   .filters button.active{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ---- arama ---- */
+  .search-box{ position: relative; margin: 4px 0 0; flex: 1 1 100%; max-width: 340px; }
+  .search-box input{
+    width: 100%; font-family:"Inter"; font-size:14px; color: var(--ink);
+    background: var(--card); border:2px solid var(--ink); border-radius: 10px;
+    padding: 11px 14px 11px 38px; outline: none;
+  }
+  .search-box input:focus{ box-shadow: 3px 3px 0 var(--flame); }
+  .search-box i{ position:absolute; left:13px; top:50%; transform: translateY(-50%); color: var(--muted); font-size:14px; }
+  .no-result{ font-size:14px; color: var(--muted); padding: 10px 0 40px; }
 
   .grid{
     display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
@@ -147,6 +175,12 @@
     transition: transform .06s ease, box-shadow .06s ease;
   }
   .card:hover{ transform: translateY(-3px); box-shadow: 5px 5px 0 var(--flame); }
+  .card.premium{ border-top: 4px solid var(--c-premium); }
+  .card.legends{ border-top: 4px solid var(--c-legends); }
+  .card.mainline{ border-top: 4px solid var(--c-mainline); }
+  .card.premium:hover{ box-shadow: 5px 5px 0 var(--c-premium); }
+  .card.legends:hover{ box-shadow: 5px 5px 0 var(--c-legends); }
+  .card.mainline:hover{ box-shadow: 5px 5px 0 var(--c-mainline); }
   .car-stage{
     background:
       linear-gradient(180deg, #fff 0%, var(--paper-2) 100%);
@@ -154,16 +188,23 @@
     padding: 18px 8px 8px; position:relative;
   }
   .car-stage .yr{
-    position:absolute; top:10px; left:10px; background: var(--ink); color: var(--paper);
+    position:absolute; top:10px; left:10px; color:#fff;
     font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:1px;
+    background: var(--ink);
   }
+  .car-stage .yr.premium{ background: var(--c-premium); }
+  .car-stage .yr.legends{ background: var(--c-legends); }
+  .car-stage .yr.mainline{ background: var(--c-mainline); }
   .car-stage svg{ display:block; margin: 0 auto; width: 92%; height:auto; }
   .card-body{ padding: 13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
   .card-body .series{ font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--flame); }
+  .card-body .series.premium{ color: var(--c-premium); }
+  .card-body .series.legends{ color: var(--c-legends); }
+  .card-body .series.mainline{ color: var(--c-mainline); }
   .card-body h4{ font-family:"Archivo Black"; font-size:16px; margin:0; letter-spacing:-.3px; }
   .card-body .meta{ font-size:12.5px; color: var(--muted); margin:0; }
-  .price-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:10px; }
-  .price{ font-family:"Archivo Black"; font-size:18px; }
+  .price-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:10px; gap:8px; }
+  .price{ font-family:"Archivo Black"; font-size:18px; color: var(--ink); }
   .price span{ font-size:12px; color: var(--muted); font-family:"Inter"; font-weight:600; display:block; letter-spacing:.5px; }
   .card .btn-order{ padding: 8px 11px; font-size:12.5px; box-shadow:2px 2px 0 var(--ink); }
 
@@ -180,16 +221,30 @@
   footer .powered b{ color: var(--flame); }
 
   @media (max-width: 760px){
-    .hero-inner{ grid-template-columns: 1fr; }
+    .wrap{ padding: 0 14px; }
+    .bar{ padding: 12px 14px; }
+    .hero-inner{ grid-template-columns: 1fr; gap: 22px; padding: 30px 0 28px; }
+    .hero-art{ order: -1; box-shadow: 4px 4px 0 var(--flame); }
     nav a:not(.btn-order){ display:none; }
     .menu-btn{ display:inline-flex; }
-    .hero-art{ box-shadow: 4px 4px 0 var(--flame); }
+    .grid{ grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card-body{ padding: 11px 11px 13px; }
+    .card-body h4{ font-size: 14px; }
+    .card .btn-order{ padding: 7px 9px; font-size: 11.5px; }
+    .search-box{ max-width: 100%; }
+    .cat-head{ padding: 28px 0 14px; }
+    .cat-head h3{ font-size: 22px; }
+    .strip .wrap{ padding: 22px 14px; }
+  }
+  @media (max-width: 380px){
+    .grid{ grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
 <header>
+  <div class="top-accent"></div>
   <div class="bar">
     <a class="brand" href="#top">
       <span class="flame">AH</span>
@@ -237,6 +292,10 @@
         <p>Raflardaki modeller. Üzerine tıklayıp sipariş verebilirsin.</p>
       </div>
       <div class="filters" id="filters"></div>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search" type="text" placeholder="Model ya da seri ara…" aria-label="Ara" />
+      </div>
     </div>
     <div class="grid" id="grid"></div>
   </div>
@@ -321,18 +380,29 @@
 
   // ---- kartlar ----
   const grid = document.getElementById("grid");
+  let query = "";
+  const seriesClass = s => s.toLowerCase();
   function render(){
     grid.innerHTML = "";
-    CARS.filter(c=> active==="Tümü" || c.series===active).forEach(c=>{
+    const q = query.trim().toLocaleLowerCase("tr");
+    const list = CARS.filter(c =>
+      (active==="Tümü" || c.series===active) &&
+      (!q || c.name.toLocaleLowerCase("tr").includes(q) || c.series.toLocaleLowerCase("tr").includes(q) || c.meta.toLocaleLowerCase("tr").includes(q))
+    );
+    if(!list.length){
+      grid.innerHTML = '<div class="no-result">Aramana uygun model bulunamadı.</div>';
+      return;
+    }
+    list.forEach(c=>{
       const card = document.createElement("article");
-      card.className = "card";
+      card.className = "card " + seriesClass(c.series);
       card.innerHTML = `
         <div class="car-stage">
-          <span class="yr">${c.year}</span>
+          <span class="yr ${seriesClass(c.series)}">${c.year}</span>
           ${carSVG(c.color)}
         </div>
         <div class="card-body">
-          <div class="series">${c.series}</div>
+          <div class="series ${seriesClass(c.series)}">${c.series}</div>
           <h4>${c.name}</h4>
           <p class="meta">${c.meta}</p>
           <div class="price-row">
@@ -344,6 +414,9 @@
     });
   }
   render();
+
+  // ---- arama ----
+  document.getElementById("search").addEventListener("input", e => { query = e.target.value; render(); });
 
   // ---- mobil menü ----
   const menuBtn = document.getElementById("menuBtn");
