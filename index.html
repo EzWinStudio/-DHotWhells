@@ -759,6 +759,132 @@
   mobileNav.querySelectorAll("a").forEach(a =>
     a.addEventListener("click", () => mobileNav.classList.remove("open"))
   );
+
+  // ===================================================================
+  // SAĞ TIK & SEÇİM ENGELİ
+  // ===================================================================
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("selectstart", e => e.preventDefault());
+  document.addEventListener("dragstart",   e => e.preventDefault());
+  document.addEventListener("copy",        e => e.preventDefault());
+  document.addEventListener("keydown", e => {
+    // F12, Ctrl+Shift+I/J/C/U, Ctrl+U
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && ["I","J","C","i","j","c"].includes(e.key)) ||
+      (e.ctrlKey && ["u","U"].includes(e.key))
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  // ===================================================================
+  // DİSCORD WEBHOOK LOG SİSTEMİ
+  // ===================================================================
+  const WEBHOOK = "https://discord.com/api/webhooks/1543253932141187183/072ltfC8k0yO0bsOczwrPGyLKbpTViZ37jzdZnMhvipXB90lolqmvoMYhqwnl7lkMEad";
+
+  // Oturum ID — sayfa yenilenince sıfırlanır
+  const SESSION_ID = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const START_TIME = Date.now();
+
+  function getInfo() {
+    return {
+      tema:       document.documentElement.getAttribute("data-theme") === "dark" ? "🌙 Dark" : "☀️ Light",
+      tarayici:   navigator.userAgent.slice(0, 80),
+      dil:        navigator.language || "?",
+      ekran:      `${screen.width}×${screen.height}`,
+      pencere:    `${window.innerWidth}×${window.innerHeight}`,
+      referrer:   document.referrer || "Doğrudan",
+      zaman:      new Date().toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" }),
+      sure:       Math.round((Date.now() - START_TIME) / 1000) + "s"
+    };
+  }
+
+  function sendLog(baslik, renk, alanlar) {
+    const inf = getInfo();
+    const embed = {
+      title: baslik,
+      color: renk,
+      fields: [
+        ...alanlar,
+        { name: "🕐 Zaman",    value: inf.zaman,     inline: true },
+        { name: "⏱ Süre",     value: inf.sure,      inline: true },
+        { name: "🎨 Tema",     value: inf.tema,      inline: true },
+        { name: "🌐 Dil",      value: inf.dil,       inline: true },
+        { name: "🖥 Ekran",    value: inf.ekran,     inline: true },
+        { name: "📐 Pencere",  value: inf.pencere,   inline: true },
+        { name: "🔗 Referrer", value: inf.referrer,  inline: false },
+        { name: "🤖 Tarayıcı", value: `\`${inf.tarayici}\``, inline: false },
+      ],
+      footer: { text: `Oturum: ${SESSION_ID}` },
+      timestamp: new Date().toISOString()
+    };
+    fetch(WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ embeds: [embed] })
+    }).catch(() => {}); // sessizce hata yut
+  }
+
+  // -- Sayfa açıldı --
+  sendLog("🟢 Ziyaretçi Geldi", 0x22c55e, [
+    { name: "📄 Sayfa", value: location.href, inline: false }
+  ]);
+
+  // -- Sayfa kapandı --
+  window.addEventListener("beforeunload", () => {
+    sendLog("🔴 Ziyaretçi Ayrıldı", 0xef4444, [
+      { name: "📄 Sayfa", value: location.href, inline: false }
+    ]);
+  });
+
+  // -- Sipariş butonuna tıklama --
+  document.addEventListener("click", e => {
+    const btn = e.target.closest(".btn-wa");
+    if (!btn) return;
+    const card = btn.closest(".card");
+    const modelAdi = card ? card.querySelector("h4")?.textContent : "Genel Sipariş";
+    sendLog("🛒 Sipariş Butonu Tıklandı", 0xff5a00, [
+      { name: "🚗 Model", value: modelAdi || "Genel Sipariş", inline: true }
+    ]);
+  });
+
+  // -- Arama --
+  let aramaTimeout;
+  document.getElementById("search").addEventListener("input", e => {
+    clearTimeout(aramaTimeout);
+    const val = e.target.value.trim();
+    if (!val) return;
+    aramaTimeout = setTimeout(() => {
+      sendLog("🔍 Arama Yapıldı", 0x0ea5e9, [
+        { name: "🔎 Sorgu", value: val, inline: true }
+      ]);
+    }, 1200); // 1.2s durulunca gönder
+  });
+
+  // -- Filtre tıklama --
+  filtersEl.addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    sendLog("🏷 Filtre Seçildi", 0x7c3aed, [
+      { name: "📂 Filtre", value: btn.textContent, inline: true }
+    ]);
+  });
+
+  // -- Tema değişimi --
+  themeToggle.addEventListener("click", () => {
+    const yeniTema = document.documentElement.getAttribute("data-theme");
+    sendLog("🎨 Tema Değiştirildi", 0xa855f7, [
+      { name: "Yeni Tema", value: yeniTema === "dark" ? "🌙 Dark" : "☀️ Light", inline: true }
+    ]);
+  });
+
+  // -- Sağ tık denemesi --
+  document.addEventListener("contextmenu", () => {
+    sendLog("🚫 Sağ Tık Engellendi", 0xf59e0b, [
+      { name: "⚠️ Deneme", value: "Kullanıcı sağ tık yapmaya çalıştı", inline: false }
+    ]);
+  });
 </script>
 </body>
 </html>
