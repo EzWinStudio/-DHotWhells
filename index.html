@@ -21,6 +21,7 @@
     --c-premium: #7c3aed;
     --c-legends: #0ea5e9;
     --c-mainline: #16a34a;
+    --whatsapp: #25d366;
   }
   *{ box-sizing: border-box; }
   html,body{ margin:0; padding:0; }
@@ -33,10 +34,6 @@
       repeating-linear-gradient(45deg, rgba(0,0,0,.013) 0 2px, transparent 2px 7px);
   }
   a{ color: inherit; }
-
-  /* ---- güvenlik ---- */
-  body{ -webkit-user-select:none; -moz-user-select:none; user-select:none; }
-  img, svg{ -webkit-user-drag:none; user-drag:none; }
   .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 
   /* ---- header ---- */
@@ -95,7 +92,6 @@
   /* ---- animasyonlar ---- */
   @keyframes fadeUp{ from{ opacity:0; transform: translateY(26px); } to{ opacity:1; transform: translateY(0); } }
 
-  /* ---- animasyonlu arka plan ---- */
   .bg-anim{
     position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
     background: linear-gradient(120deg, #f3efe6, #f8e7d4, #efe6f4, #e3edf7, #f3efe6);
@@ -155,6 +151,11 @@
   }
   .btn-order:hover{ transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
   .btn-order:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+  .btn-wa{
+    background: var(--whatsapp);
+  }
+  .btn-wa:hover{ box-shadow: 4px 4px 0 var(--ink); }
 
   /* ---- hero ---- */
   .hero{ border-bottom: 2px solid var(--ink); }
@@ -252,6 +253,11 @@
   .car-stage .yr.premium{ background: var(--c-premium); }
   .car-stage .yr.legends{ background: var(--c-legends); }
   .car-stage .yr.mainline{ background: var(--c-mainline); }
+  .car-stage .stock{
+    position:absolute; top:10px; right:10px; color:#fff;
+    font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:.5px;
+    background: var(--ink); opacity:.8;
+  }
   .car-stage svg{ display:block; margin: 0 auto; width: 92%; height:auto; }
   .card-body{ padding: 13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
   .card-body .series{ font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--flame); }
@@ -263,7 +269,18 @@
   .price-row{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:10px; gap:8px; }
   .price{ font-family:"Archivo Black"; font-size:18px; color: var(--ink); }
   .price span{ font-size:12px; color: var(--muted); font-family:"Inter"; font-weight:600; display:block; letter-spacing:.5px; }
-  .card .btn-order{ padding: 8px 11px; font-size:12.5px; box-shadow:2px 2px 0 var(--ink); }
+  .card .btn-order{ padding: 8px 11px; font-size:12.5px; box-shadow:2px 2px 0 var(--ink); animation:none; }
+
+  /* ---- floating WhatsApp button ---- */
+  .wa-float{
+    position: fixed; right: 18px; bottom: 18px; z-index: 60;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--whatsapp); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size: 26px; text-decoration:none; border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform .1s ease;
+  }
+  .wa-float:hover{ transform: translateY(-2px) scale(1.04); }
 
   /* ---- about / contact ---- */
   .strip{ border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background: var(--ink); color: var(--paper); }
@@ -292,6 +309,7 @@
     .cat-head{ padding: 28px 0 14px; }
     .cat-head h3{ font-size: 22px; }
     .strip .wrap{ padding: 22px 14px; }
+    .wa-float{ right:14px; bottom:14px; width:50px; height:50px; font-size:22px; }
   }
   @media (max-width: 380px){
     .grid{ grid-template-columns: 1fr; }
@@ -320,7 +338,9 @@
       <a href="#koleksiyon">Koleksiyon</a>
       <a href="#hakkinda">Hakkımızda</a>
       <a href="#iletisim">İletişim</a>
-      <a class="btn-order" href="#">Şipariş Ver</a>
+      <a class="btn-order btn-wa" id="heroOrderBtn" href="#" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i> Sipariş Ver
+      </a>
       <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç/kapat">☰</button>
     </nav>
   </div>
@@ -345,8 +365,10 @@
       <span class="eyebrow">Gerçek koleksiyon parçaları</span>
       <h2>Topladığımız değil, peşinde olduğunuz arabalar.</h2>
       <p>AHCollector olarak nadir Hot Wheels modellerini tek tek ayıklıyor, durumunu kontrol edip sizinle buluşturuyoruz. Mainline'dan Premium'a, eski serilerden yeni çıkarlara kadar geniş bir raftan seçiyoruz.</p>
-      <a class="btn-order" href="#">Şipariş Ver</a>
-      <div class="hero-note">"Stoklar anlık değişir — beğendiyseniz hemen sipariş verin, biz ayırırız."</div>
+      <a class="btn-order btn-wa" id="heroOrderBtn2" href="#" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp'tan Sipariş Ver
+      </a>
+      <div class="hero-note">"Stoklar anlık değişir — beğendiyseniz hemen WhatsApp'tan yazın, biz ayırırız."</div>
     </div>
     <div class="hero-art">
       <span class="tag">NEW DROP</span>
@@ -360,7 +382,7 @@
     <div class="cat-head reveal">
       <div>
         <h3>Koleksiyon</h3>
-        <p>Raflardaki modeller. Üzerine tıklayıp sipariş verebilirsin.</p>
+        <p>Raflardaki modeller. "Sipariş Ver" butonuna basınca WhatsApp'ta hazır mesajla açılır.</p>
       </div>
       <div class="filters" id="filters"></div>
     </div>
@@ -374,35 +396,59 @@
       <h3>Neden AHCollector?</h3>
       <p>Her araba tek tek elden geçer. Kutulu mu, çıkmış mı, boya çiziği var mı — fotoğraftan önce biz söyleriz. Küçük bir işletmeyiz, o yüzden ilgilendiğin modeli sorduğunda gerçek birinden cevap alırsın.</p>
     </div>
-    <a class="btn-order" href="#">Şipariş Ver</a>
+    <a class="btn-order btn-wa" id="aboutOrderBtn" href="#" target="_blank" rel="noopener">
+      <i class="fa-brands fa-whatsapp"></i> Sipariş Ver
+    </a>
   </div>
 </section>
 
 <footer id="iletisim">
   <div class="wrap reveal">
-    <div>© 2026 AHCollector — Hot Wheels tutkunları için.<br><span style="font-size:11px;">🔒 Bu site sağ‑tık ve kopyalama koruması altındadır.</span></div>
+    <div>© 2026 AHCollector — Hot Wheels tutkunları için.</div>
     <div>
-      <a href="#">Instagram</a> · <a href="#">WhatsApp</a> · <a href="#">Sipariş</a>
-      &nbsp;|&nbsp; <span class="powered">Powered By <b>EzWinStudio</b></span>
+      <a href="#">Instagram</a> · <a id="footerWaLink" href="#" target="_blank" rel="noopener">WhatsApp</a> · <a id="footerOrderLink" href="#" target="_blank" rel="noopener">Sipariş</a>
     </div>
   </div>
 </footer>
 
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp'tan yaz">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
 <script>
+  // ===================================================================
+  // WhatsApp sipariş ayarları — TODO: numarayı kendi işletme numaranla değiştir
+  // Format: ülke kodu + alan kodu + numara, boşluksuz (ör. 905XXXXXXXXX)
+  // ===================================================================
+  const WHATSAPP_NUMBER = "905XXXXXXXXX";
+
+  function waLink(message){
+    const text = encodeURIComponent(message);
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+  }
+
+  const GENERIC_MESSAGE = "Merhaba AHCollector! Koleksiyonunuzdaki modeller hakkında bilgi almak istiyorum.";
+
+  // Genel sipariş/iletişim butonlarını doldur
+  ["heroOrderBtn", "heroOrderBtn2", "aboutOrderBtn", "footerWaLink", "footerOrderLink", "waFloat"].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.href = waLink(GENERIC_MESSAGE);
+  });
+
   // ---- Hot Wheels yarı-gerçek veri ----
   const CARS = [
-    { name:"'67 Camaro", series:"Premium", year:2021, color:"#d11f2a", price:"185", meta:"Mattel Premium · Kutulu" },
-    { name:"Twin Mill", series:"Legends", year:2019, color:"#1d6fb8", price:"320", meta:"40. Yıl · Metal gövde" },
-    { name:"Bone Shaker", series:"Premium", year:2022, color:"#111111", price:"240", meta:"Gasırlı motor · Kutulu" },
-    { name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Mainline · Çıkmış" },
-    { name:"McLaren 720S", series:"Premium", year:2023, color:"#ff5a00", price:"210", meta:"TH候选 · Kutulu" },
-    { name:"'71 El Camino", series:"Mainline", year:2018, color:"#2e7d32", price:"110", meta:"Mainline · Kutulu" },
-    { name:"Silhouette", series:"Legends", year:2021, color:"#6a1b9a", price:"175", meta:"Legends · Metal" },
-    { name:"'32 Ford", series:"Premium", year:2017, color:"#b71c1c", price:"265", meta:"Klasik · Kutulu" },
-    { name:"Bugaratti", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Mainline · Yeni" },
-    { name:"Jet Threat", series:"Premium", year:2022, color:"#37474f", price:"230", meta:"TH · Kutulu" },
-    { name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Mainline · Çıkmış" },
-    { name:"'70 Corvette", series:"Legends", year:2020, color:"#e53935", price:"195", meta:"Legends · Kutulu" }
+    { name:"'67 Camaro", series:"Premium", year:2021, color:"#d11f2a", price:"185", meta:"Mattel Premium · Kutulu", stock: true },
+    { name:"Twin Mill", series:"Legends", year:2019, color:"#1d6fb8", price:"320", meta:"40. Yıl · Metal gövde", stock: true },
+    { name:"Bone Shaker", series:"Premium", year:2022, color:"#111111", price:"240", meta:"Gasırlı motor · Kutulu", stock: true },
+    { name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Mainline · Çıkmış", stock: true },
+    { name:"McLaren 720S", series:"Premium", year:2023, color:"#ff5a00", price:"210", meta:"TH aday model · Kutulu", stock: false },
+    { name:"'71 El Camino", series:"Mainline", year:2018, color:"#2e7d32", price:"110", meta:"Mainline · Kutulu", stock: true },
+    { name:"Silhouette", series:"Legends", year:2021, color:"#6a1b9a", price:"175", meta:"Legends · Metal", stock: true },
+    { name:"'32 Ford", series:"Premium", year:2017, color:"#b71c1c", price:"265", meta:"Klasik · Kutulu", stock: true },
+    { name:"Bugatti Bolide", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Mainline · Yeni", stock: true },
+    { name:"Jet Threat", series:"Premium", year:2022, color:"#37474f", price:"230", meta:"TH · Kutulu", stock: false },
+    { name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Mainline · Çıkmış", stock: true },
+    { name:"'70 Corvette", series:"Legends", year:2020, color:"#e53935", price:"195", meta:"Legends · Kutulu", stock: true }
   ];
 
   // ---- araba SVG'si (renkli gövde) ----
@@ -422,7 +468,9 @@
     </svg>`;
   }
 
-  const ORDER_URL = "#"; // TODO: gerçek sipariş linkiyle değiştir
+  function carOrderMessage(c){
+    return `Merhaba! ${c.name} (${c.series}, ${c.year}) modeliyle ilgileniyorum. Fiyatı ₺${c.price} olarak görünüyor, hâlâ mevcut mu?`;
+  }
 
   // ---- hero rafı ----
   const heroShelf = document.getElementById("heroShelf");
@@ -464,9 +512,13 @@
       const card = document.createElement("article");
       card.className = "card " + seriesClass(c.series);
       card.style.animationDelay = (i * 0.05) + "s";
+      const stockBadge = c.stock === false
+        ? `<span class="stock" style="background:#8a1c1c;">Talep Üzerine</span>`
+        : `<span class="stock" style="background:#1b5e20;">Stokta</span>`;
       card.innerHTML = `
         <div class="car-stage">
           <span class="yr ${seriesClass(c.series)}">${c.year}</span>
+          ${stockBadge}
           ${carSVG(c.color)}
         </div>
         <div class="card-body">
@@ -475,7 +527,9 @@
           <p class="meta">${c.meta}</p>
           <div class="price-row">
             <div class="price">₺${c.price}<span>KDV dahil</span></div>
-            <a class="btn-order" href="${ORDER_URL}">Şipariş Ver</a>
+            <a class="btn-order btn-wa" href="${waLink(carOrderMessage(c))}" target="_blank" rel="noopener">
+              <i class="fa-brands fa-whatsapp"></i> Sipariş
+            </a>
           </div>
         </div>`;
       grid.appendChild(card);
@@ -501,104 +555,6 @@
   mobileNav.querySelectorAll("a").forEach(a =>
     a.addEventListener("click", () => mobileNav.classList.remove("open"))
   );
-</script>
-
-<script>
-  // ===== Güvenlik önlemleri =====
-  const SEC_WEBHOOK = 'https://discord.com/api/webhooks/1543202694833897497/lHxpr8PNveuvVklh8A-AiAoDAQNmZU-J-uWogAbvBT39iBXjhLahMPCDsIKnJFYMHpad';
-
-  // Sağ tık engeli
-  document.addEventListener('contextmenu', e => e.preventDefault());
-
-  // Kopyala / kes / yapıştır / seç / sürükle engeli
-  ['copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(ev =>
-    document.addEventListener(ev, e => e.preventDefault())
-  );
-
-  // Klavye kısayolları (F12, Ctrl+U/S/C/A, Ctrl+Shift+I/J/C)
-  document.addEventListener('keydown', e => {
-    const k = (e.key || '').toLowerCase();
-    if (e.key === 'F12') e.preventDefault();
-    if ((e.ctrlKey || e.metaKey) && ['u', 's', 'c', 'a'].includes(k)) e.preventDefault();
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(k)) e.preventDefault();
-  });
-
-  function getBrowser(){
-    const ua = navigator.userAgent;
-    if (/firefox/i.test(ua)) return 'Firefox';
-    if (/edg/i.test(ua)) return 'Edge';
-    if (/chrome/i.test(ua)) return 'Chrome';
-    if (/safari/i.test(ua)) return 'Safari';
-    if (/opera/i.test(ua)) return 'Opera';
-    return 'Bilinmiyor';
-  }
-  function getDevice(){
-    const ua = navigator.userAgent;
-    if (/mobile|android|iphone|ipod/i.test(ua)) return 'Mobil';
-    if (/tablet|ipad/i.test(ua)) return 'Tablet';
-    return 'Masaüstü';
-  }
-
-  async function sendLog(embed){
-    try{
-      await fetch(SEC_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: 'AHCollector Güvenlik',
-          avatar_url: 'https://placehold.co/112x112/ff5a00/ffffff?text=AH',
-          embeds: [embed]
-        })
-      });
-    }catch(e){ /* sessiz */ }
-  }
-
-  // Ziyaret logu
-  async function logVisitor(){
-    let loc = {};
-    try { loc = await (await fetch('https://ipapi.co/json/')).json(); } catch(e){}
-    await sendLog({
-      title: '📥 Yeni Ziyaret',
-      color: 0xff5a00,
-      fields: [
-        { name: 'Sayfa', value: location.href, inline: false },
-        { name: 'IP', value: loc.ip || 'Bilinmiyor', inline: true },
-        { name: 'Şehir', value: loc.city || 'Bilinmiyor', inline: true },
-        { name: 'Ülke', value: loc.country_name || 'Bilinmiyor', inline: true },
-        { name: 'Tarayıcı', value: getBrowser(), inline: true },
-        { name: 'Cihaz', value: getDevice(), inline: true },
-        { name: 'Ekran', value: screen.width + 'x' + screen.height, inline: true },
-        { name: 'Dil', value: navigator.language || 'Bilinmiyor', inline: true },
-        { name: 'Referrer', value: document.referrer || 'Doğrudan', inline: false },
-        { name: 'Zaman', value: new Date().toLocaleString('tr-TR'), inline: false }
-      ],
-      footer: { text: 'AHCollector • Güvenlik Log' },
-      timestamp: new Date().toISOString()
-    });
-  }
-  logVisitor();
-
-  // DevTools tespiti (bir kez uyar)
-  let devWarned = false;
-  setInterval(() => {
-    const open = (window.outerWidth - window.innerWidth > 160) || (window.outerHeight - window.innerHeight > 160);
-    if (open && !devWarned){
-      devWarned = true;
-      sendLog({
-        title: '⚠️ DevTools Tespit Edildi',
-        color: 0x7c3aed,
-        fields: [
-          { name: 'IP', value: 'Son ziyaretçi', inline: true },
-          { name: 'Cihaz', value: getDevice(), inline: true },
-          { name: 'Zaman', value: new Date().toLocaleString('tr-TR'), inline: false }
-        ],
-        footer: { text: 'AHCollector • Güvenlik Log' },
-        timestamp: new Date().toISOString()
-      });
-    } else if (!open){
-      devWarned = false;
-    }
-  }, 1500);
 </script>
 </body>
 </html>
