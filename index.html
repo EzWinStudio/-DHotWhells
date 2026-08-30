@@ -64,6 +64,10 @@
     animation: slideAccent 8s linear infinite;
   }
   @keyframes slideAccent { from{ background-position:0 0; } to{ background-position:200% 0; } }
+  .announce-bar{
+    background: var(--ink); color: var(--paper); text-align:center;
+    font-size:12.5px; font-weight:600; padding:7px 14px; letter-spacing:.2px;
+  }
   header{
     border-bottom: 2px solid var(--ink);
     background: var(--paper);
@@ -170,7 +174,16 @@
     display:flex; align-items:center; justify-content:center;
   }
   .cart-item .ci-qty button:hover{ background: var(--paper-2); }
+  .cart-item .ci-qty button:disabled{ opacity:.4; cursor:not-allowed; }
   .cart-item .ci-qty span{ font-weight:700; font-size:13px; min-width:14px; text-align:center; }
+  .cart-item .ci-maxnote{ font-size:10.5px; color: var(--flame); font-weight:700; margin-top:3px; }
+  .fav-item-actions{ display:flex; gap:6px; margin-top:6px; }
+  .fav-item-actions button{
+    border:1.5px solid var(--line); background: var(--paper); border-radius:7px;
+    padding:5px 9px; font-size:11.5px; font-weight:700; cursor:pointer; color: var(--ink);
+  }
+  .fav-item-actions .fav-add{ background: var(--flame); color:#fff; border-color: var(--ink); }
+  .fav-item-actions button:hover{ filter: brightness(1.05); }
   .cart-item .ci-remove{
     background:none; border:none; color: var(--muted); cursor:pointer; font-size:14px;
     align-self:flex-start; padding:2px;
@@ -384,6 +397,14 @@
     font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:.5px;
     background: var(--flame);
   }
+  .fav-btn{
+    position:absolute; bottom:8px; right:8px; z-index:2;
+    width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line);
+    background: var(--card); color: var(--muted); cursor:pointer; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .fav-btn:hover{ color: var(--flame); }
+  .fav-btn.active{ color: var(--flame); border-color: var(--flame); }
   .car-stage svg{ display:block; margin: 0 auto; width: 92%; height:auto; }
   .card-body{ padding: 13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
   .card-body .series{ font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--flame); }
@@ -395,6 +416,16 @@
   .price{ font-family:"Archivo Black"; font-size:18px; color: var(--ink); }
   .price span{ font-size:12px; color: var(--muted); font-family:"Inter"; font-weight:600; display:block; letter-spacing:.5px; }
   .card .btn-order{ padding: 8px 11px; font-size:12.5px; box-shadow:2px 2px 0 var(--ink); }
+  .card .btn-order:disabled{
+    background: var(--paper-2); color: var(--muted); border-color: var(--line);
+    box-shadow:none; cursor:not-allowed; animation:none;
+  }
+  @keyframes stockLimitShake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-3px); }
+    75%{ transform: translateX(3px); }
+  }
+  .stock-limit{ animation: stockLimitShake .35s ease; outline: 2px solid var(--flame); }
 
   /* ---- about / contact ---- */
   .strip{ border-top:2px solid var(--ink); border-bottom:2px solid var(--ink); background: var(--ink); color: var(--paper); }
@@ -405,8 +436,14 @@
   footer{ padding: 28px 0 40px; color: var(--muted); font-size:13px; }
   footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center; }
   footer a{ color: var(--ink); text-decoration: none; font-weight:600; }
-  footer .powered{ font-weight:600; }
-  footer .powered b{ color: var(--flame); }
+  footer .powered-btn{
+    display:inline-flex; align-items:center; gap:4px; font-weight:700; text-decoration:none;
+    color: var(--ink); background: linear-gradient(135deg,#e8e8ea,#c6c8cc,#f2f2f4,#b7b9bd);
+    border: 1px solid #9a9ca0; border-radius: 20px; padding: 4px 12px; font-size:12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+  footer .powered-btn:hover{ filter: brightness(1.05); }
+  footer .powered-btn b{ color:#4a4a4a; }
 
   @media (max-width: 760px){
     .wrap{ padding: 0 14px; }
@@ -442,6 +479,7 @@
 
 <header>
   <div class="top-accent"></div>
+  <div class="announce-bar">📍 Sadece Erzincan içi teslimat · 2.000₺ üstü alımlarda kargo yapılmaktadır</div>
   <div class="bar">
     <a class="brand" href="#top">
       <span class="flame">ŞD</span>
@@ -460,6 +498,10 @@
         <i class="fa-solid fa-moon"></i>
         <span id="themeLabel">LIGHT</span>
       </div>
+      <button class="cart-btn open-favs" id="favsBtn" aria-label="Favorileri aç">
+        <i class="fa-solid fa-heart"></i>
+        <span class="cart-count" id="favsCount">0</span>
+      </button>
       <button class="cart-btn open-cart" id="cartBtn" aria-label="Sepeti aç">
         <i class="fa-solid fa-cart-shopping"></i>
         <span class="cart-count" id="cartCount">0</span>
@@ -532,7 +574,7 @@
     <div>© 2026 Şimşek Diecast — Hot Wheels tutkunları için.<br><span style="font-size:11px;">🔒 Bu site sağ‑tık ve kopyalama koruması altındadır.</span></div>
     <div>
       <a href="https://www.instagram.com/simsekdiecaststore/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.letgo.com/profil/518688416" target="_blank" rel="noopener">Letgo</a> · <a href="https://dolap.com/profil/simsekdiecast" target="_blank" rel="noopener">Dolap</a>
-      &nbsp;|&nbsp; <span class="powered">Powered By <b>EzWinStudio</b></span>
+      &nbsp;|&nbsp; <a class="powered-btn" href="#" target="_blank" rel="noopener">Powered By <b>EzWinStudio</b></a>
     </div>
   </div>
 </footer>
@@ -560,20 +602,29 @@
   </div>
 </aside>
 
+<div class="cart-overlay" id="favsOverlay"></div>
+<aside class="cart-drawer favs-drawer" id="favsDrawer" aria-label="Favorilerim">
+  <div class="cart-head">
+    <h3><i class="fa-solid fa-heart"></i> Favorilerim</h3>
+    <button class="cart-close" id="favsClose" aria-label="Favorileri kapat">✕</button>
+  </div>
+  <div class="cart-items" id="favsItems"></div>
+</aside>
+
 <script>
   // ---- Hot Wheels yarı-gerçek veri ----
   const CARS = [
     { id:"camaro67", name:"'67 Camaro", series:"Premium", year:2021, color:"#d11f2a", price:"185", meta:"Kutulu", stock:2 },
-    { id:"twinmill", name:"Twin Mill", series:"Premium", year:2019, color:"#1d6fb8", price:"320", meta:"Metal gövde", stock:1 },
+    { id:"twinmill", name:"Twin Mill", series:"Premium", year:2019, color:"#1d6fb8", price:"320", meta:"Kutulu", stock:1 },
     { id:"boneshaker", name:"Bone Shaker", series:"Premium", year:2022, color:"#111111", price:"240", meta:"Kutulu", stock:3 },
-    { id:"chevy55", name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Çıkmış", stock:4 },
+    { id:"chevy55", name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Kutulu", stock:4 },
     { id:"mclaren720s", name:"McLaren 720S", series:"Premium", year:2023, color:"#ff5a00", price:"210", meta:"Kutulu", stock:2 },
     { id:"elcamino71", name:"'71 El Camino", series:"Mainline", year:2018, color:"#2e7d32", price:"110", meta:"Kutulu", stock:5 },
-    { id:"silhouette", name:"Silhouette", series:"Mainline", year:2021, color:"#6a1b9a", price:"175", meta:"Metal gövde", stock:1 },
+    { id:"silhouette", name:"Silhouette", series:"Mainline", year:2021, color:"#6a1b9a", price:"175", meta:"Kutulu", stock:1 },
     { id:"ford32", name:"'32 Ford", series:"Premium", year:2017, color:"#b71c1c", price:"265", meta:"Kutulu", stock:1 },
-    { id:"bugaratti", name:"Bugaratti", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Yeni", stock:6 },
+    { id:"bugaratti", name:"Bugaratti", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Kutulu", stock:6 },
     { id:"jetthreat", name:"Jet Threat", series:"Premium", year:2022, color:"#37474f", price:"230", meta:"Kutulu", stock:2 },
-    { id:"custom71iii", name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Çıkmış", stock:3 },
+    { id:"custom71iii", name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Kutulu", stock:3 },
     { id:"corvette70", name:"'70 Corvette", series:"Premium", year:2020, color:"#e53935", price:"195", meta:"Kutulu", stock:1 }
   ];
 
@@ -595,6 +646,14 @@
   }
 
   const ORDER_URL = "#"; // TODO: gerçek sipariş linkiyle değiştir
+
+  // ---- sepet verisi (render()'dan önce yüklenmeli) ----
+  let cart = {};
+  try{ cart = JSON.parse(localStorage.getItem("sd-cart") || "{}"); }catch(e){ cart = {}; }
+
+  // ---- favoriler verisi ----
+  let favs = {};
+  try{ favs = JSON.parse(localStorage.getItem("sd-favs") || "{}"); }catch(e){ favs = {}; }
 
   // ---- hero rafı ----
   const heroShelf = document.getElementById("heroShelf");
@@ -636,10 +695,16 @@
       const card = document.createElement("article");
       card.className = "card " + seriesClass(c.series);
       card.style.animationDelay = (i * 0.05) + "s";
+      const inCart = cart[c.id] || 0;
+      const maxed = inCart >= c.stock;
+      const isFav = !!favs[c.id];
       card.innerHTML = `
         <div class="car-stage">
           <span class="yr ${seriesClass(c.series)}">${c.year}</span>
           <span class="stock-badge">${c.stock}x</span>
+          <button class="fav-btn ${isFav ? "active" : ""}" data-id="${c.id}" aria-label="Favorile">
+            <i class="fa-${isFav ? "solid" : "regular"} fa-heart"></i>
+          </button>
           ${carSVG(c.color)}
         </div>
         <div class="card-body">
@@ -648,8 +713,8 @@
           <p class="meta">${c.meta}</p>
           <div class="price-row">
             <div class="price">₺${c.price}<span>KDV dahil</span></div>
-            <button class="btn-order add-to-cart" data-id="${c.id}">
-              <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
+            <button class="btn-order add-to-cart" data-id="${c.id}" ${maxed ? "disabled" : ""}>
+              <i class="fa-solid ${maxed ? "fa-ban" : "fa-cart-plus"}"></i> ${maxed ? "Stok Bitti" : "Sepete Ekle"}
             </button>
           </div>
         </div>`;
@@ -695,8 +760,6 @@
 
   // ---- sepet ----
   const INSTAGRAM_URL = "https://www.instagram.com/simsekdiecaststore/";
-  let cart = {};
-  try{ cart = JSON.parse(localStorage.getItem("sd-cart") || "{}"); }catch(e){ cart = {}; }
 
   const cartOverlay = document.getElementById("cartOverlay");
   const cartDrawer = document.getElementById("cartDrawer");
@@ -720,17 +783,35 @@
   }
 
   function addToCart(id){
-    cart[id] = (cart[id] || 0) + 1;
+    const c = findCar(id);
+    if(!c) return;
+    const current = cart[id] || 0;
+    if(current >= c.stock){
+      flashStockLimit(id);
+      return;
+    }
+    cart[id] = current + 1;
     saveCart();
     renderCart();
     openCart();
   }
   function changeQty(id, delta){
     if(!cart[id]) return;
+    const c = findCar(id);
+    if(delta > 0 && c && cart[id] >= c.stock){
+      flashStockLimit(id);
+      return;
+    }
     cart[id] += delta;
     if(cart[id] <= 0) delete cart[id];
     saveCart();
     renderCart();
+  }
+  function flashStockLimit(id){
+    document.querySelectorAll(`[data-id="${id}"]`).forEach(el => {
+      el.classList.add("stock-limit");
+      setTimeout(() => el.classList.remove("stock-limit"), 500);
+    });
   }
   function removeFromCart(id){
     delete cart[id];
@@ -743,6 +824,49 @@
     renderCart();
   }
 
+  // ---- favoriler ----
+  const favsOverlay = document.getElementById("favsOverlay");
+  const favsDrawer = document.getElementById("favsDrawer");
+  const favsItemsEl = document.getElementById("favsItems");
+  const favsCountEl = document.getElementById("favsCount");
+
+  function saveFavs(){
+    try{ localStorage.setItem("sd-favs", JSON.stringify(favs)); }catch(e){}
+  }
+  function toggleFav(id){
+    if(favs[id]) delete favs[id];
+    else favs[id] = true;
+    saveFavs();
+    renderFavs();
+    render();
+  }
+  function openFavs(){ favsOverlay.classList.add("open"); favsDrawer.classList.add("open"); }
+  function closeFavs(){ favsOverlay.classList.remove("open"); favsDrawer.classList.remove("open"); }
+
+  function renderFavs(){
+    const ids = Object.keys(favs).filter(id => findCar(id));
+    favsCountEl.textContent = ids.length;
+    if(!ids.length){
+      favsItemsEl.innerHTML = '<div class="cart-empty">Henüz favorin yok.<br>Kartlardaki kalp ikonuna basarak ekleyebilirsin.</div>';
+      return;
+    }
+    favsItemsEl.innerHTML = ids.map(id => {
+      const c = findCar(id);
+      return `
+        <div class="cart-item">
+          <div class="ci-svg">${carSVG(c.color)}</div>
+          <div class="ci-body">
+            <h5>${c.name}</h5>
+            <div class="ci-price">₺${c.price} · ${c.meta}</div>
+            <div class="fav-item-actions">
+              <button class="fav-add" data-id="${c.id}">Sepete Ekle</button>
+              <button class="fav-remove" data-id="${c.id}">Kaldır</button>
+            </div>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
   function renderCart(){
     const ids = Object.keys(cart).filter(id => findCar(id));
     const totalCount = ids.reduce((sum, id) => sum + cart[id], 0);
@@ -751,6 +875,7 @@
     if(!ids.length){
       cartItemsEl.innerHTML = '<div class="cart-empty">Sepetin boş.<br>Beğendiğin modelleri "Sepete Ekle" ile buraya ekleyebilirsin.</div>';
       cartTotalEl.textContent = "₺0";
+      render();
       return;
     }
 
@@ -760,6 +885,7 @@
       const qty = cart[id];
       const lineTotal = Number(c.price) * qty;
       total += lineTotal;
+      const maxed = qty >= c.stock;
       return `
         <div class="cart-item">
           <div class="ci-svg">${carSVG(c.color)}</div>
@@ -769,18 +895,22 @@
             <div class="ci-qty">
               <button class="qty-minus" data-id="${c.id}">−</button>
               <span>${qty}</span>
-              <button class="qty-plus" data-id="${c.id}">+</button>
+              <button class="qty-plus" data-id="${c.id}" ${maxed ? "disabled" : ""}>+</button>
             </div>
+            ${maxed ? '<div class="ci-maxnote">Stok sınırına ulaşıldı</div>' : ""}
           </div>
           <button class="ci-remove" data-id="${c.id}" aria-label="Kaldır"><i class="fa-solid fa-trash"></i></button>
         </div>`;
     }).join("");
     cartTotalEl.textContent = "₺" + total.toLocaleString("tr-TR");
+    render();
   }
 
   // sepete ekleme (kartlardan gelen delegasyon)
   grid.addEventListener("click", e => {
     const btn = e.target.closest(".add-to-cart");
+    const fav = e.target.closest(".fav-btn");
+    if(fav){ toggleFav(fav.dataset.id); return; }
     if(!btn) return;
     addToCart(btn.dataset.id);
   });
@@ -795,12 +925,25 @@
     if(remove) removeFromCart(remove.dataset.id);
   });
 
+  // favori paneli içi butonlar
+  favsItemsEl.addEventListener("click", e => {
+    const add = e.target.closest(".fav-add");
+    const remove = e.target.closest(".fav-remove");
+    if(add) addToCart(add.dataset.id);
+    if(remove) toggleFav(remove.dataset.id);
+  });
+
   // aç/kapat
   document.querySelectorAll(".open-cart").forEach(el =>
-    el.addEventListener("click", e => { e.preventDefault(); openCart(); })
+    el.addEventListener("click", e => { e.preventDefault(); closeFavs(); openCart(); })
+  );
+  document.querySelectorAll(".open-favs").forEach(el =>
+    el.addEventListener("click", e => { e.preventDefault(); closeCart(); openFavs(); })
   );
   document.getElementById("cartClose").addEventListener("click", closeCart);
   cartOverlay.addEventListener("click", closeCart);
+  document.getElementById("favsClose").addEventListener("click", closeFavs);
+  favsOverlay.addEventListener("click", closeFavs);
   document.getElementById("cartClear").addEventListener("click", clearCart);
 
   // sepeti kopyala + otomatik temizle
@@ -872,6 +1015,7 @@
   });
 
   renderCart();
+  renderFavs();
 </script>
 
 <script>
