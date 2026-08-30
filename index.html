@@ -178,8 +178,16 @@
   .cart-item .ci-remove:hover{ color: var(--flame); }
   .cart-footer{ border-top: 2px solid var(--ink); padding: 16px 18px 20px; display:flex; flex-direction:column; gap:10px; }
   .cart-total-row{ display:flex; justify-content:space-between; align-items:center; font-family:"Archivo Black"; font-size:18px; }
-  .cart-checkout{ width:100%; justify-content:center; background:#25d366; border-color: var(--ink); animation:none; }
-  .cart-checkout:hover{ background:#20bd5a; }
+  .cart-checkout{ width:100%; justify-content:center; background: linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4); border-color: var(--ink); animation:none; }
+  .cart-checkout:hover{ filter: brightness(1.05); }
+  .cart-hint{ margin:0; font-size:11.5px; color: var(--muted); text-align:center; }
+  .cart-copy{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
+    background: var(--card); border:1.5px solid var(--line); border-radius:10px;
+    padding:11px; font-weight:700; font-size:13.5px; color: var(--ink); cursor:pointer;
+  }
+  .cart-copy:hover{ background: var(--paper-2); }
+  .cart-copy.copied{ background: var(--c-mainline); border-color: var(--c-mainline); color:#fff; }
   .cart-clear{
     background:none; border:none; color: var(--muted); font-size:12.5px; font-weight:600;
     cursor:pointer; text-decoration:underline; align-self:center;
@@ -483,11 +491,9 @@
       <p>Rastgele bir stok değil, özenle seçilmiş bir raf. Her model elden geçer, durumu netleşir — kutulu mu, çıkmış mı, fotoğraftan önce biz söyleriz. Nadir klasiklerden yeni çıkan setlere kadar aradığın model büyük ihtimalle burada.</p>
       <a class="btn-order open-cart" href="#">Şipariş Ver</a>
       <div class="channel-links">
-        <a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a>
-        <a href="#"><i class="fa-solid fa-tag"></i> Letgo</a>
-        <a href="#"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-        <a href="#"><i class="fa-solid fa-shirt"></i> Dolap</a>
-        <a href="#"><i class="fa-solid fa-car"></i> Sahibinden</a>
+        <a href="https://www.instagram.com/simsekdiecaststore/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://www.letgo.com/profil/518688416" target="_blank" rel="noopener"><i class="fa-solid fa-tag"></i> Letgo</a>
+        <a href="https://dolap.com/profil/simsekdiecast" target="_blank" rel="noopener"><i class="fa-solid fa-shirt"></i> Dolap</a>
       </div>
       <div class="hero-note">"Stoklar anlık değişir — beğendiyseniz hemen sipariş verin, biz ayırırız."</div>
     </div>
@@ -525,7 +531,7 @@
   <div class="wrap reveal">
     <div>© 2026 Şimşek Diecast — Hot Wheels tutkunları için.<br><span style="font-size:11px;">🔒 Bu site sağ‑tık ve kopyalama koruması altındadır.</span></div>
     <div>
-      <a href="#">Instagram</a> · <a href="#">Letgo</a> · <a href="#">WhatsApp</a> · <a href="#">Dolap</a> · <a href="#">Sahibinden</a>
+      <a href="https://www.instagram.com/simsekdiecaststore/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.letgo.com/profil/518688416" target="_blank" rel="noopener">Letgo</a> · <a href="https://dolap.com/profil/simsekdiecast" target="_blank" rel="noopener">Dolap</a>
       &nbsp;|&nbsp; <span class="powered">Powered By <b>EzWinStudio</b></span>
     </div>
   </div>
@@ -544,7 +550,11 @@
       <span id="cartTotal">₺0</span>
     </div>
     <button class="btn-order cart-checkout" id="cartCheckout">
-      <i class="fa-brands fa-whatsapp"></i> WhatsApp'tan Sipariş Ver
+      <i class="fa-brands fa-instagram"></i> Instagram'dan Sipariş Ver
+    </button>
+    <p class="cart-hint" id="cartHint">Sipariş özetin kopyalanır, Instagram DM'de gönderebilirsin.</p>
+    <button class="cart-copy" id="cartCopy">
+      <i class="fa-solid fa-copy"></i> Sepeti Kopyala
     </button>
     <button class="cart-clear" id="cartClear">Sepeti Temizle</button>
   </div>
@@ -684,7 +694,7 @@
   });
 
   // ---- sepet ----
-  const CART_PHONE = "905000000000"; // TODO: gerçek WhatsApp numarasıyla değiştir
+  const INSTAGRAM_URL = "https://www.instagram.com/simsekdiecaststore/";
   let cart = {};
   try{ cart = JSON.parse(localStorage.getItem("sd-cart") || "{}"); }catch(e){ cart = {}; }
 
@@ -793,9 +803,49 @@
   cartOverlay.addEventListener("click", closeCart);
   document.getElementById("cartClear").addEventListener("click", clearCart);
 
-  // WhatsApp'tan sipariş
+  // sepeti kopyala + otomatik temizle
+  function buildCartText(){
+    const ids = Object.keys(cart).filter(id => findCar(id));
+    if(!ids.length) return null;
+    let total = 0;
+    const lines = ids.map(id => {
+      const c = findCar(id);
+      const qty = cart[id];
+      const lineTotal = Number(c.price) * qty;
+      total += lineTotal;
+      return `- ${c.name} (${c.series}, ${c.meta}) x${qty} — ₺${lineTotal}`;
+    });
+    return { text: `Şimşek Diecast Sepetim:\n${lines.join("\n")}\n\nToplam: ₺${total}`, total };
+  }
+
+  document.getElementById("cartCopy").addEventListener("click", () => {
+    const copyBtn = document.getElementById("cartCopy");
+    const cartHint = document.getElementById("cartHint");
+    const data = buildCartText();
+    if(!data){ return; }
+
+    const afterCopy = () => {
+      copyBtn.classList.add("copied");
+      const oldLabel = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Kopyalandı!';
+      cartHint.textContent = "Sepet bilgileri kopyalandı, sepetin temizlendi.";
+      clearCart();
+      setTimeout(() => {
+        copyBtn.classList.remove("copied");
+        copyBtn.innerHTML = oldLabel;
+      }, 1600);
+    };
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(data.text).then(afterCopy).catch(afterCopy);
+    } else {
+      afterCopy();
+    }
+  });
+  // Instagram'dan sipariş
   document.getElementById("cartCheckout").addEventListener("click", () => {
     const ids = Object.keys(cart).filter(id => findCar(id));
+    const cartHint = document.getElementById("cartHint");
     if(!ids.length){ return; }
     let total = 0;
     const lines = ids.map(id => {
@@ -805,8 +855,20 @@
       return `- ${c.name} x${qty} (₺${Number(c.price)*qty})`;
     });
     const msgText = `Merhaba, Şimşek Diecast'ten sipariş vermek istiyorum:\n${lines.join("\n")}\n\nToplam: ₺${total}`;
-    const msg = encodeURIComponent(msgText);
-    window.open(`https://wa.me/${CART_PHONE}?text=${msg}`, "_blank");
+
+    const openInsta = () => window.open(INSTAGRAM_URL, "_blank");
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(msgText).then(() => {
+        cartHint.textContent = "Sipariş özeti kopyalandı! Instagram DM'e yapıştırıp gönderebilirsin.";
+        openInsta();
+      }).catch(() => {
+        cartHint.textContent = "Instagram açılıyor — sipariş özetini DM'de yaz.";
+        openInsta();
+      });
+    } else {
+      cartHint.textContent = "Instagram açılıyor — sipariş özetini DM'de yaz.";
+      openInsta();
+    }
   });
 
   renderCart();
