@@ -21,6 +21,7 @@
     --c-premium: #7c3aed;
     --c-legends: #0ea5e9;
     --c-mainline: #16a34a;
+    --c-silver: #64748b;
   }
   html[data-theme="dark"]{
     --ink: #f3efe6;
@@ -376,8 +377,10 @@
   }
   .card:hover{ transform: translateY(-3px); box-shadow: 5px 5px 0 var(--flame); }
   .card.premium{ border-top: 4px solid var(--c-premium); }
+  .card.silver{ border-top: 4px solid var(--c-silver); }
   .card.mainline{ border-top: 4px solid var(--c-mainline); }
   .card.premium:hover{ box-shadow: 5px 5px 0 var(--c-premium); }
+  .card.silver:hover{ box-shadow: 5px 5px 0 var(--c-silver); }
   .card.mainline:hover{ box-shadow: 5px 5px 0 var(--c-mainline); }
   .car-stage{
     background:
@@ -391,6 +394,7 @@
     background: var(--ink);
   }
   .car-stage .yr.premium{ background: var(--c-premium); }
+  .car-stage .yr.silver{ background: var(--c-silver); }
   .car-stage .yr.mainline{ background: var(--c-mainline); }
   .car-stage .stock-badge{
     position:absolute; top:10px; right:10px; color:#fff;
@@ -409,6 +413,7 @@
   .card-body{ padding: 13px 14px 15px; display:flex; flex-direction:column; gap:6px; flex:1; }
   .card-body .series{ font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--flame); }
   .card-body .series.premium{ color: var(--c-premium); }
+  .card-body .series.silver{ color: var(--c-silver); }
   .card-body .series.mainline{ color: var(--c-mainline); }
   .card-body h4{ font-family:"Archivo Black"; font-size:16px; margin:0; letter-spacing:-.3px; }
   .card-body .meta{ font-size:12.5px; color: var(--muted); margin:0; }
@@ -438,12 +443,12 @@
   footer a{ color: var(--ink); text-decoration: none; font-weight:600; }
   footer .powered-btn{
     display:inline-flex; align-items:center; gap:4px; font-weight:700; text-decoration:none;
-    color: var(--ink); background: linear-gradient(135deg,#e8e8ea,#c6c8cc,#f2f2f4,#b7b9bd);
+    color:#2a2a2a; background: linear-gradient(135deg,#e8e8ea,#c6c8cc,#f2f2f4,#b7b9bd);
     border: 1px solid #9a9ca0; border-radius: 20px; padding: 4px 12px; font-size:12px;
     box-shadow: 0 1px 2px rgba(0,0,0,.15);
   }
   footer .powered-btn:hover{ filter: brightness(1.05); }
-  footer .powered-btn b{ color:#4a4a4a; }
+  footer .powered-btn b{ color:#3a2a5a; }
 
   @media (max-width: 760px){
     .wrap{ padding: 0 14px; }
@@ -506,7 +511,7 @@
         <i class="fa-solid fa-cart-shopping"></i>
         <span class="cart-count" id="cartCount">0</span>
       </button>
-      <a class="btn-order open-cart" href="#">Şipariş Ver</a>
+      <a class="btn-order open-cart" href="#">Sipariş Ver</a>
       <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç/kapat">☰</button>
     </nav>
   </div>
@@ -531,7 +536,7 @@
       <span class="eyebrow">Gerçek koleksiyon parçaları</span>
       <h2>Topladığımız değil, peşinde olduğunuz arabalar.</h2>
       <p>Rastgele bir stok değil, özenle seçilmiş bir raf. Her model elden geçer, durumu netleşir — kutulu mu, çıkmış mı, fotoğraftan önce biz söyleriz. Nadir klasiklerden yeni çıkan setlere kadar aradığın model büyük ihtimalle burada.</p>
-      <a class="btn-order open-cart" href="#">Şipariş Ver</a>
+      <a class="btn-order open-cart" href="#">Sipariş Ver</a>
       <div class="channel-links">
         <a href="https://www.instagram.com/simsekdiecaststore/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> Instagram</a>
         <a href="https://www.letgo.com/profil/518688416" target="_blank" rel="noopener"><i class="fa-solid fa-tag"></i> Letgo</a>
@@ -565,7 +570,7 @@
       <h3>Neden Şimşek Diecast?</h3>
       <p>Her araba tek tek elden geçer. Kutulu mu, çıkmış mı, boya çiziği var mı — fotoğraftan önce biz söyleriz. Küçük bir işletmeyiz, o yüzden ilgilendiğin modeli sorduğunda gerçek birinden cevap alırsın.</p>
     </div>
-    <a class="btn-order open-cart" href="#">Şipariş Ver</a>
+    <a class="btn-order open-cart" href="#">Sipariş Ver</a>
   </div>
 </section>
 
@@ -616,13 +621,13 @@
   const CARS = [
     { id:"camaro67", name:"'67 Camaro", series:"Premium", year:2021, color:"#d11f2a", price:"185", meta:"Kutulu", stock:2 },
     { id:"twinmill", name:"Twin Mill", series:"Premium", year:2019, color:"#1d6fb8", price:"320", meta:"Kutulu", stock:1 },
-    { id:"boneshaker", name:"Bone Shaker", series:"Premium", year:2022, color:"#111111", price:"240", meta:"Kutulu", stock:3 },
+    { id:"boneshaker", name:"Bone Shaker", series:"Silver", year:2022, color:"#111111", price:"240", meta:"Kutulu", stock:3 },
     { id:"chevy55", name:"'55 Chevy", series:"Mainline", year:2020, color:"#f2a900", price:"95", meta:"Kutulu", stock:4 },
-    { id:"mclaren720s", name:"McLaren 720S", series:"Premium", year:2023, color:"#ff5a00", price:"210", meta:"Kutulu", stock:2 },
+    { id:"mclaren720s", name:"McLaren 720S", series:"Silver", year:2023, color:"#ff5a00", price:"210", meta:"Kutulu", stock:2 },
     { id:"elcamino71", name:"'71 El Camino", series:"Mainline", year:2018, color:"#2e7d32", price:"110", meta:"Kutulu", stock:5 },
-    { id:"silhouette", name:"Silhouette", series:"Mainline", year:2021, color:"#6a1b9a", price:"175", meta:"Kutulu", stock:1 },
+    { id:"silhouette", name:"Silhouette", series:"Silver", year:2021, color:"#6a1b9a", price:"175", meta:"Kutulu", stock:1 },
     { id:"ford32", name:"'32 Ford", series:"Premium", year:2017, color:"#b71c1c", price:"265", meta:"Kutulu", stock:1 },
-    { id:"bugaratti", name:"Bugaratti", series:"Mainline", year:2024, color:"#00897b", price:"90", meta:"Kutulu", stock:6 },
+    { id:"bugaratti", name:"Bugaratti", series:"Silver", year:2024, color:"#00897b", price:"90", meta:"Kutulu", stock:6 },
     { id:"jetthreat", name:"Jet Threat", series:"Premium", year:2022, color:"#37474f", price:"230", meta:"Kutulu", stock:2 },
     { id:"custom71iii", name:"Custom '71 III", series:"Mainline", year:2019, color:"#c2185b", price:"120", meta:"Kutulu", stock:3 },
     { id:"corvette70", name:"'70 Corvette", series:"Premium", year:2020, color:"#e53935", price:"195", meta:"Kutulu", stock:1 }
